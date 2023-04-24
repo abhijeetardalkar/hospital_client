@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SideMenu from "../SideMenu";
-
+import { getKey, removeKey } from "../utils/commonFunctions";
+import { Link, useNavigate } from "react-router-dom";
 const Dashboard = () => {
   //   return <SideMenu />;
+  console.log("loading dAsh");
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState(null);
+  useEffect(() => {
+    let user = JSON.parse(getKey("user"));
+    setUserID(user?.user_id || null);
+    console.log("aaa", { user });
+    if (!user || !user?.user_id) {
+      navigate("/");
+      // return (
+      //   <Router>
+      //     <Routes>
+      //       <Route path="/" element={<SignIn></SignIn>}></Route>
+      //     </Routes>
+      //   </Router>
+      // );
+    }
+  });
+  if (!userID) {
+    return null;
+  }
+
   return (
     <div class="g-sidenav-show  bg-gray-100">
       <SideMenu />
@@ -57,13 +80,21 @@ const Dashboard = () => {
                   </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                  <a
+                  <Link
                     // href="javascript:;"
                     class="nav-link text-body font-weight-bold px-0"
+                    to="/"
                   >
                     <i class="fa fa-user me-sm-1"></i>
-                    <span class="d-sm-inline d-none">Sign In</span>
-                  </a>
+                    <span
+                      class="d-sm-inline d-none"
+                      onClick={() => {
+                        removeKey("user");
+                      }}
+                    >
+                      Sign Out
+                    </span>
+                  </Link>
                 </li>
                 <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                   <a
@@ -105,7 +136,7 @@ const Dashboard = () => {
                         <div class="d-flex py-1">
                           <div class="my-auto">
                             <img
-                              src="./img/team-2.jpg"
+                              src="/img/team-2.jpg"
                               class="avatar avatar-sm  me-3 "
                             />
                           </div>
@@ -130,7 +161,7 @@ const Dashboard = () => {
                         <div class="d-flex py-1">
                           <div class="my-auto">
                             <img
-                              src="./img/small-logos/logo-spotify.svg"
+                              src="/img/small-logos/logo-spotify.svg"
                               class="avatar avatar-sm bg-gradient-dark  me-3 "
                             />
                           </div>
@@ -353,14 +384,14 @@ const Dashboard = () => {
                     <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
                       <div class="bg-gradient-primary border-radius-lg h-100">
                         <img
-                          src="./img/shapes/waves-white.svg"
+                          src="/img/shapes/waves-white.svg"
                           class="position-absolute h-100 w-50 top-0 d-lg-block d-none"
                           alt="waves"
                         />
                         <div class="position-relative d-flex align-items-center justify-content-center h-100">
                           <img
                             class="w-100 position-relative z-index-2 pt-4"
-                            src="./img/illustrations/rocket-white.png"
+                            src="/img/illustrations/rocket-white.png"
                             alt="rocket"
                           />
                         </div>

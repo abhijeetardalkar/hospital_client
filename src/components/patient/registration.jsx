@@ -34,7 +34,7 @@ const registration = () => {
       setError(_error);
     }
 
-    console.log(data, { SERVER_PATH }, { error, message });
+    // console.log(data, { SERVER_PATH }, { error, message });
     let _data = {
       login_id: data?.loginID,
       password: data?.password,
@@ -64,27 +64,21 @@ const registration = () => {
       body: JSON.stringify(_data),
     });
     let result = await res.json();
-    console.log({ result });
+    // console.log({ result });
 
     // if (result && result.hasOwnProperty() && !result.hasOwnProperty("error")) {
     if (result && result?.pat_data && result?.pat_data?.length) {
-      console.log("AAAA");
       setMessage("Patient Inserted Successfully");
-
       reset();
       setTimeout(() => {
         setMessage(null);
       }, 2000);
     } else if (result?.pat_data?.error.code == "ER_DUP_ENTRY") {
-      console.log("AAABBBBBBA");
-
       setError("Patient Insertion Failed. Duplicate Entry");
       setTimeout(() => {
         setError(null);
       }, 2000);
     } else {
-      console.log("XXXX");
-
       setError("Patient Insertion Failed");
       setTimeout(() => {
         setError(null);

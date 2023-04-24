@@ -1,6 +1,6 @@
 import React from "react";
 import SideMenu from "./SideMenu";
-import Dashboard from "./dashboard/Dashboard";
+import Dashboard from "./admin/Dashboard";
 
 const Layout = () => {
   return (

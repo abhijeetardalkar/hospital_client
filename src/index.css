@@ -94,6 +94,11 @@ button:focus-visible {
   color: #067b0a;
 }
 
+.user-type-box-select {
+  border-bottom-color: red;
+  border-bottom-width: 2px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
