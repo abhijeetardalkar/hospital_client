@@ -33,9 +33,11 @@ const login = () => {
       // );
     } else {
       // navigate("/dashboard");
-      let path = userType == "admin" ? "a" : userType == "doctor" ? "d" : "p";
+      console.log({ userType });
+      let _userType = user?.user_type;
+      let path = _userType == "admin" ? "a" : _userType == "doctor" ? "d" : "p";
 
-      navigate(`${path}/dashboard`, { state: { user_type: userType } });
+      navigate(`${path}/dashboard`, { state: { user_type: _userType } });
     }
   }, []);
   const handleUserType = (type) => {
