@@ -9,6 +9,8 @@ import Dashboard from "./components/admin/Dashboard";
 import DashboardPatient from "./components/patient/Dashboard";
 import DashboardDoctor from "./components/doctor/Dashboard";
 import PatientRegistration from "./components/patient/PatientRegistration";
+import DoctorRegistration from "./components/doctor/DoctorRegistration";
+import DoctorAppointment from "./components/doctor/AppointmentCopy";
 import SignIn from "./components/login/login";
 import { getKey } from "./components/utils/commonFunctions";
 
@@ -75,6 +77,16 @@ function App() {
           exact
           path="/patient/registration"
           element={<PatientRegistration />}
+        ></Route>
+        <Route
+          exact
+          path="/doctor/registration"
+          element={<DoctorRegistration />}
+        ></Route>
+        <Route
+          exact
+          path="/doctor/appointment"
+          element={<DoctorAppointment />}
         ></Route>
       </Routes>
     </Router>

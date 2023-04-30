@@ -1,13 +1,13 @@
 import React from "react";
 import SideMenu from "../SideMenu";
 import Registration from "./registration";
-const PatientRegistration = () => {
+const DoctorRegistration = () => {
   return (
     <div class="g-sidenav-show  bg-gray-100">
-      <SideMenu type="patient" />
+      <SideMenu type="doctor" />
       <Registration />
     </div>
   );
 };
 
-export default PatientRegistration;
+export default DoctorRegistration;

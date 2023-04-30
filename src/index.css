@@ -99,6 +99,16 @@ button:focus-visible {
   border-bottom-width: 2px;
 }
 
+/* modifying form width */
+.form-appointment {
+  background-color: white;
+  border-radius: 5px;
+  width: 750px !important;
+  margin: 20px auto;
+  padding: 20px;
+  /* height: 600px; */
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
