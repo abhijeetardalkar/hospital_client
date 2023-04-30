@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import SideMenu from "../SideMenu";
-import { getKey, removeKey } from "../utils/commonFunctions";
+import {
+  getKey,
+  removeKey,
+  getAppointmentData,
+} from "../utils/commonFunctions";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../Header";
 import { SERVER_PATH } from "../../../config";
@@ -20,38 +24,6 @@ const Dashboard = () => {
   const [doctorAppointmentsLastWeek, setDoctorAppointmentsLastWeek] =
     useState(null);
 
-  const getAppointmentData = async (
-    _path,
-    _date,
-    user_id,
-    operator,
-    _date2
-  ) => {
-    console.log({ _path, _date });
-    try {
-      let _data = {
-        doc_id: user_id,
-        visit_date: moment(_date).format("yyyy-MM-DD"),
-        equality: operator,
-        visit_date2: _date2 ? moment(_date2).format("yyyy-MM-DD") : null,
-      };
-
-      console.log("ABHIII", { _data });
-      let res = await fetch(SERVER_PATH + `/api/doctor/${_path}`, {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(_data),
-      });
-      let result = await res.json();
-      console.log({ result });
-      return result;
-    } catch (e) {
-      console.log({ e });
-    }
-  };
   useEffect(() => {
     let user = JSON.parse(getKey("user"));
     setUser(user || null);

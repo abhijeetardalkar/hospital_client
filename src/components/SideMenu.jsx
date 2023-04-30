@@ -28,7 +28,8 @@ const MENU_DOCTOR = [
 
   {
     menu_name: "Previous Appointments",
-    pathname: "/doctor/registration",
+    pathname: "/doctor/previous-appointment",
+    // pathname: "/doctor/registration",
   },
 ];
 const MENU_PATIENT = [

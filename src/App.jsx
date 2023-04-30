@@ -11,6 +11,7 @@ import DashboardDoctor from "./components/doctor/Dashboard";
 import PatientRegistration from "./components/patient/PatientRegistration";
 import DoctorRegistration from "./components/doctor/DoctorRegistration";
 import DoctorAppointment from "./components/doctor/AppointmentCopy";
+import DoctorPreviousAppointment from "./components/doctor/PreviousAppointments";
 import SignIn from "./components/login/login";
 import { getKey } from "./components/utils/commonFunctions";
 
@@ -87,6 +88,11 @@ function App() {
           exact
           path="/doctor/appointment"
           element={<DoctorAppointment />}
+        ></Route>
+        <Route
+          exact
+          path="/doctor/previous-appointment"
+          element={<DoctorPreviousAppointment />}
         ></Route>
       </Routes>
     </Router>
