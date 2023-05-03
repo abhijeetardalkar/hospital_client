@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { getKey, removeKey } from "./utils/commonFunctions";
 import { SERVER_PATH } from "../../config";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+const ROUTE_ARRAY = {
+  dashboard: ["/d/dashboard", "/a/dashboard"],
+  blog: ["/admin/create-blog", "/blogs/blog"],
+};
 
 const Header = ({ setLoginFullName }) => {
   const [user, setUser] = useState(JSON.parse(getKey("user")));
   const [loginName, setLoginName] = useState("");
-  console.log({ user });
+  const [slag, setSlag] = useState("");
+  const location = useLocation();
+  // console.log({ user });
   const getUser = async (_type) => {
     try {
       let _data = {
@@ -47,14 +54,34 @@ const Header = ({ setLoginFullName }) => {
       if (res?.user_data?.length) {
         // console.log("USER : ", res?.user_data[0]);
         setLoginName(_salutation + res?.user_data[0].first_name);
-        setLoginFullName(
-          _salutation +
-            `${res?.user_data[0].first_name} ${res?.user_data[0].last_name}`
-        );
+        setLoginFullName &&
+          setLoginFullName(
+            _salutation +
+              `${res?.user_data[0].first_name} ${res?.user_data[0].last_name}`
+          );
       }
     }
     a();
   }, [user]);
+
+  useEffect(() => {
+    // console.log({})
+    let _path = "";
+    if (ROUTE_ARRAY.dashboard.includes(location.pathname)) {
+      _path = "Dashboard";
+    } else if (location.pathname == "/doctor/appointment") {
+      _path = "Create Appointment";
+    } else if (location.pathname == "/patient/registration") {
+      _path = "Patient Registration";
+    } else if (location.pathname == "/doctor/previous-appointment") {
+      _path = "Previous Appointment";
+    } else if (ROUTE_ARRAY.blog.includes(location.pathname)) {
+      _path = "Blog";
+    }
+
+    setSlag(_path);
+  }, [location]);
+  // console.log({ location });
   return (
     <>
       <nav
@@ -71,13 +98,13 @@ const Header = ({ setLoginFullName }) => {
                 </a>
               </li>
               <li
-                class="breadcrumb-item text-sm text-dark active"
+                class="breadcrumb-item text-sm text-dark active font-weight-bolder"
                 aria-current="page"
               >
-                Dashboard
+                {slag}
               </li>
             </ol>
-            <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+            {/* <h6 class="font-weight-bolder mb-0">{slag}</h6> */}
           </nav>
           <div
             class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
@@ -85,14 +112,14 @@ const Header = ({ setLoginFullName }) => {
           >
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
               <div class="input-group">
-                <span class="input-group-text text-body">
+                {/* <span class="input-group-text text-body">
                   <i class="fas fa-search" aria-hidden="true"></i>
                 </span>
                 <input
                   type="text"
                   class="form-control"
                   placeholder="Type here..."
-                />
+                /> */}
               </div>
             </div>
             <ul class="navbar-nav  justify-content-end">
@@ -123,7 +150,7 @@ const Header = ({ setLoginFullName }) => {
                   </span>
                 </Link>
               </li>
-              <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+              {/* <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                 <a
                   href="javascript:;"
                   class="nav-link text-body p-0"
@@ -137,20 +164,10 @@ const Header = ({ setLoginFullName }) => {
                 </a>
               </li>
               <li class="nav-item px-3 d-flex align-items-center">
-                {/* <a href="javascript:;" class="nav-link text-body p-0"> */}
-                <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
-                {/* </a> */}
-              </li>
+                  <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+                 </li>
               <li class="nav-item dropdown pe-2 d-flex align-items-center">
-                {/* <a
-                  //  href="javascript:;"
-                    class="nav-link text-body p-0"
-                    id="dropdownMenuButton"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <i class="fa fa-bell cursor-pointer"></i>
-                  </a> */}
+             
                 <ul
                   class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
                   aria-labelledby="dropdownMenuButton"
@@ -158,7 +175,7 @@ const Header = ({ setLoginFullName }) => {
                   <li class="mb-2">
                     <a
                       class="dropdown-item border-radius-md"
-                      // href="javascript:;"
+                    
                     >
                       <div class="d-flex py-1">
                         <div class="my-auto">
@@ -183,7 +200,7 @@ const Header = ({ setLoginFullName }) => {
                   <li class="mb-2">
                     <a
                       class="dropdown-item border-radius-md"
-                      // href="javascript:;"
+                     
                     >
                       <div class="d-flex py-1">
                         <div class="my-auto">
@@ -207,7 +224,7 @@ const Header = ({ setLoginFullName }) => {
                   <li>
                     <a
                       class="dropdown-item border-radius-md"
-                      // href="javascript:;"
+                      
                     >
                       <div class="d-flex py-1">
                         <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
@@ -258,7 +275,7 @@ const Header = ({ setLoginFullName }) => {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

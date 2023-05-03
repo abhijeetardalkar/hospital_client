@@ -72,102 +72,103 @@ const PreviousAppointments = () => {
                   }
                 >
                   <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0">
-                      <thead>
-                        <tr>
-                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Name
-                          </th>
-                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                            Symptom
-                          </th>
-                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Payment Status
-                          </th>
-                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Visit Date
-                          </th>
-                          <th class="text-secondary opacity-7"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {appointmentData?.map((item, inx) => {
-                          let isDue =
-                            !item.remaining_fees || item.remaining_fees == 0
-                              ? false
-                              : true;
-                          let full_name = `${item?.first_name} ${
-                            item?.middle_name ? item?.middle_name : ""
-                          } ${item?.last_name}`;
+                    {appointmentData?.length ? (
+                      <table class="table align-items-center mb-0">
+                        <thead>
+                          <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                              Name
+                            </th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                              Symptom
+                            </th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                              Payment Status
+                            </th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                              Visit Date
+                            </th>
+                            <th class="text-secondary opacity-7"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {appointmentData?.map((item, inx) => {
+                            let isDue =
+                              !item.remaining_fees || item.remaining_fees == 0
+                                ? false
+                                : true;
+                            let full_name = `${item?.first_name} ${
+                              item?.middle_name ? item?.middle_name : ""
+                            } ${item?.last_name}`;
 
-                          return (
-                            <tr>
-                              <td>
-                                <div class="d-flex px-2 py-1">
-                                  <div>
-                                    <img
-                                      src="./img/team-2.jpg"
-                                      class="avatar avatar-sm me-3"
-                                      alt="user1"
-                                    />
+                            return (
+                              <tr>
+                                <td>
+                                  <div class="d-flex px-2 py-1">
+                                    <div>
+                                      <img
+                                        src="./img/team-2.jpg"
+                                        class="avatar avatar-sm me-3"
+                                        alt="user1"
+                                      />
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center">
+                                      <h6 class="mb-0 text-sm">{full_name}</h6>
+                                      <p class="text-xs text-secondary mb-0">
+                                        {item?.email}
+                                      </p>
+                                    </div>
                                   </div>
-                                  <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="mb-0 text-sm">{full_name}</h6>
-                                    <p class="text-xs text-secondary mb-0">
-                                      {item?.email}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <p class="text-xs font-weight-bold mb-0">
-                                  {item?.symptom_desc}
-                                </p>
-                                <p class="text-xs text-secondary mb-0">
-                                  {item?.remark}{" "}
-                                </p>
-                              </td>
-                              <td class="align-middle text-center text-sm">
-                                <span
-                                  class={`badge badge-sm  ${
-                                    !isDue
-                                      ? "bg-gradient-success"
-                                      : "bg-gradient-danger"
-                                  }`}
-                                >
-                                  {!isDue ? "Clear" : "Due"}
-                                </span>
-                              </td>
-                              <td class="align-middle text-center">
-                                <span class="text-secondary text-xs font-weight-bold">
-                                  {item?.visit_date
-                                    ? moment(item?.visit_date).format(
-                                        "DD MMM yyyy"
-                                      )
-                                    : ""}
-                                </span>
-                              </td>
-                              <td class="align-middle">
-                                <a
-                                  //   href="javascript:;"
-                                  class="text-secondary font-weight-bold text-xs cursor-pointer"
-                                  data-toggle="tooltip"
-                                  data-original-title="Edit user"
-                                  onClick={(e) => {
-                                    let _row = {
-                                      ...item,
-                                      full_name: full_name,
-                                    };
-                                    setSelectedPatient(_row);
-                                  }}
-                                >
-                                  Show
-                                </a>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                        {/* <tr>
+                                </td>
+                                <td>
+                                  <p class="text-xs font-weight-bold mb-0">
+                                    {item?.symptom_desc}
+                                  </p>
+                                  <p class="text-xs text-secondary mb-0">
+                                    {item?.remark}{" "}
+                                  </p>
+                                </td>
+                                <td class="align-middle text-center text-sm">
+                                  <span
+                                    class={`badge badge-sm  ${
+                                      !isDue
+                                        ? "bg-gradient-success"
+                                        : "bg-gradient-danger"
+                                    }`}
+                                  >
+                                    {!isDue ? "Clear" : "Due"}
+                                  </span>
+                                </td>
+                                <td class="align-middle text-center">
+                                  <span class="text-secondary text-xs font-weight-bold">
+                                    {item?.visit_date
+                                      ? moment(item?.visit_date).format(
+                                          "DD MMM yyyy"
+                                        )
+                                      : ""}
+                                  </span>
+                                </td>
+                                <td class="align-middle">
+                                  <a
+                                    //   href="javascript:;"
+                                    class="text-secondary font-weight-bold text-xs cursor-pointer"
+                                    data-toggle="tooltip"
+                                    data-original-title="Edit user"
+                                    onClick={(e) => {
+                                      let _row = {
+                                        ...item,
+                                        full_name: full_name,
+                                      };
+                                      setSelectedPatient(_row);
+                                    }}
+                                  >
+                                    Show
+                                  </a>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                          {/* <tr>
                           <td>
                             <div class="d-flex px-2 py-1">
                               <div>
@@ -212,8 +213,15 @@ const PreviousAppointments = () => {
                             </a>
                           </td>
                         </tr> */}
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    ) : (
+                      <div>
+                        <p className="centered">
+                          No appointment history available!
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

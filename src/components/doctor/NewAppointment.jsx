@@ -258,213 +258,210 @@ const NewAppointment = ({
             <div class="card-header pb-0 p-3">
               <div class="row"></div>
               <div class="col-12">
-                <div class="card mb-4">
-                  <div class="card-header pb-0">
-                    <h6 className="centered">New Appointment Copy</h6>
-                  </div>
-                  <div class="card-body px-0 pt-0 pb-2">
-                    <div className="row">
-                      <div class="table-responsive p-0 col-12 col-xl-12">
-                        <div>
-                          {/* {error && <p>{error?.message}</p>} */}
-                          {/* {data && <Navigate to="/dashboard" replace={true} />} */}
-                          <form
-                            id="form-appointment"
-                            className="form-appointment"
-                            onSubmit={handleSubmit(onSubmit)}
-                          >
-                            <div className="form-body" id="regform">
-                              <div className="username">
-                                <label className="form__label" for="doctor">
-                                  Doctor{" "}
+                {/* <div class="card mb-4"> */}
+                <div class="card-header pb-0">
+                  <h6 className="centered">New Appointment Copy</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                  <div className="row">
+                    <div class="table-responsive p-0 col-12 col-xl-12">
+                      <div>
+                        {/* {error && <p>{error?.message}</p>} */}
+                        {/* {data && <Navigate to="/dashboard" replace={true} />} */}
+                        <form
+                          id="form-appointment"
+                          className="form-appointment"
+                          onSubmit={handleSubmit(onSubmit)}
+                        >
+                          <div className="form-body" id="regform">
+                            <div className="username">
+                              <label className="form__label" for="doctor">
+                                Doctor{" "}
+                              </label>
+                              <input
+                                className="form-control"
+                                type="text"
+                                id="doctor"
+                                disabled={true}
+                                placeholder="Login ID"
+                                value={loginFullName}
+                                // {...register("doctor")}
+                                // required={true}
+                                // onChange={handleChange}
+                              />
+                            </div>
+                            <div className="row">
+                              <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label className="form__label" for="loginID">
+                                  Patient Login ID{" "}
                                 </label>
                                 <input
                                   className="form-control"
                                   type="text"
-                                  id="doctor"
-                                  disabled={true}
+                                  id="loginID"
                                   placeholder="Login ID"
-                                  value={loginFullName}
-                                  // {...register("doctor")}
+                                  {...register("loginID")}
+                                  required={true}
+                                  onChange={handlePatientLoginIDChange}
+                                />
+                              </div>
+                              <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label className="form__label" for="visitDate">
+                                  Visit Date{" "}
+                                </label>
+                                <input
+                                  className="form-control"
+                                  type="date"
+                                  id="visitDate"
+                                  // value={"2023-04-15"}
+                                  // defaultValue={moment(new Date()).format(
+                                  //   "yyyy-MM-DD"
+                                  // )}
+                                  // value={}
+                                  {...register("visitDate")}
+                                  // required={true}
+                                  onChange={handleChangeVisitDate}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="row">
+                              <div className="username  col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label
+                                  className="form__label"
+                                  for="symptomDesc"
+                                >
+                                  Symptom Description{" "}
+                                </label>
+                                <textarea
+                                  className="form-control"
+                                  // type="text"
+                                  // multiple={true}
+                                  id="symptomDesc"
+                                  placeholder="Symptom Description"
+                                  {...register("symptomDesc")}
+                                  required={true}
+                                  // onChange={handleChange}
+                                />
+                              </div>
+                              <div className="username  col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label
+                                  // className="form__label"
+                                  for="treatmentDesc"
+                                >
+                                  Treatment Description{" "}
+                                </label>
+                                <textarea
+                                  className="form-control"
+                                  // type="text"
+                                  id="treatmentDesc"
+                                  placeholder="Symptom Description"
+                                  {...register("treatmentDesc", {
+                                    required: true,
+                                  })}
                                   // required={true}
                                   // onChange={handleChange}
                                 />
                               </div>
-                              <div className="row">
-                                <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label className="form__label" for="loginID">
-                                    Patient Login ID{" "}
-                                  </label>
-                                  <input
-                                    className="form-control"
-                                    type="text"
-                                    id="loginID"
-                                    placeholder="Login ID"
-                                    {...register("loginID")}
-                                    required={true}
-                                    onChange={handlePatientLoginIDChange}
-                                  />
-                                </div>
-                                <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label
-                                    className="form__label"
-                                    for="visitDate"
-                                  >
-                                    Visit Date{" "}
-                                  </label>
-                                  <input
-                                    className="form-control"
-                                    type="date"
-                                    id="visitDate"
-                                    // value={"2023-04-15"}
-                                    // defaultValue={moment(new Date()).format(
-                                    //   "yyyy-MM-DD"
-                                    // )}
-                                    // value={}
-                                    {...register("visitDate")}
-                                    // required={true}
-                                    onChange={handleChangeVisitDate}
-                                  />
-                                </div>
+                            </div>
+                            <div className="row">
+                              <div className="username  col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label className="form__label" for="remark">
+                                  Remark{" "}
+                                </label>
+                                <textarea
+                                  className="form-control"
+                                  id="remark"
+                                  placeholder="Remark"
+                                  {...register("remark")}
+                                  required={true}
+                                  // onChange={handleChange}
+                                />
                               </div>
-
-                              <div className="row">
-                                <div className="username  col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label
-                                    className="form__label"
-                                    for="symptomDesc"
-                                  >
-                                    Symptom Description{" "}
-                                  </label>
-                                  <textarea
-                                    className="form-control"
-                                    // type="text"
-                                    // multiple={true}
-                                    id="symptomDesc"
-                                    placeholder="Symptom Description"
-                                    {...register("symptomDesc")}
-                                    required={true}
-                                    // onChange={handleChange}
-                                  />
-                                </div>
-                                <div className="username  col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label
-                                    // className="form__label"
-                                    for="treatmentDesc"
-                                  >
-                                    Treatment Description{" "}
-                                  </label>
-                                  <textarea
-                                    className="form-control"
-                                    // type="text"
-                                    id="treatmentDesc"
-                                    placeholder="Symptom Description"
-                                    {...register("treatmentDesc", {
-                                      required: true,
-                                    })}
-                                    // required={true}
-                                    // onChange={handleChange}
-                                  />
-                                </div>
-                              </div>
-                              <div className="row">
-                                <div className="username  col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label className="form__label" for="remark">
-                                    Remark{" "}
-                                  </label>
-                                  <textarea
-                                    className="form-control"
-                                    id="remark"
-                                    placeholder="Remark"
-                                    {...register("remark")}
-                                    required={true}
-                                    // onChange={handleChange}
-                                  />
-                                </div>
-                                <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label
-                                    className="form__label"
-                                    for="nextVisitDate"
-                                  >
-                                    Next Visit Date{" "}
-                                  </label>
-                                  <input
-                                    className="form-control"
-                                    type="date"
-                                    id="nextVisitDate"
-                                    // value={"2023-04-15"}
-                                    // defaultValue={moment(new Date())
-                                    // .add(4, "day")
-                                    // .format("yyyy-MM-DD")}
-                                    // value={nextVisitDate}
-                                    {...register("nextVisitDate")}
-                                    // required={true}
-                                    // onChange={handleChange}
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="row">
-                                <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label className="form__label" for="paidFees">
-                                    Paid Fees{" "}
-                                  </label>
-                                  <input
-                                    className="form-control"
-                                    type="number"
-                                    min={0}
-                                    id="paidFees"
-                                    placeholder="Paid Fees"
-                                    {...register("paidFees", {
-                                      required: true,
-                                    })}
-                                    required={true}
-                                    // onChange={handlePatientLoginIDChange}
-                                  />
-                                </div>
-                                <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label className="form__label" for="remFees">
-                                    Remaining Fees{" "}
-                                  </label>
-                                  <input
-                                    className="form-control"
-                                    type="number"
-                                    min={0}
-                                    id="remFees"
-                                    placeholder="Remaining Fees"
-                                    {...register("remFees", { required: true })}
-                                    // required={true}
-                                    // onChange={handlePatientLoginIDChange}
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="row">
-                                <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                  <label className="form__label" for="fileUrl">
-                                    Upload File{" "}
-                                  </label>
-                                  <input
-                                    className="form-control"
-                                    type="file"
-                                    id="fileUrl"
-                                    placeholder="Select file"
-                                    {...register("fileUrl")}
-                                    // required={true}
-                                    onChange={handleFileUpload}
-                                  />
-                                </div>
+                              <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label
+                                  className="form__label"
+                                  for="nextVisitDate"
+                                >
+                                  Next Visit Date{" "}
+                                </label>
+                                <input
+                                  className="form-control"
+                                  type="date"
+                                  id="nextVisitDate"
+                                  // value={"2023-04-15"}
+                                  // defaultValue={moment(new Date())
+                                  // .add(4, "day")
+                                  // .format("yyyy-MM-DD")}
+                                  // value={nextVisitDate}
+                                  {...register("nextVisitDate")}
+                                  // required={true}
+                                  // onChange={handleChange}
+                                />
                               </div>
                             </div>
-                            <div class="footer">
-                              <input
-                                type="submit"
-                                class="btn"
-                                title="Submit"
-                                // onClick={handleSubmit}
-                              ></input>
+
+                            <div className="row">
+                              <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label className="form__label" for="paidFees">
+                                  Paid Fees{" "}
+                                </label>
+                                <input
+                                  className="form-control"
+                                  type="number"
+                                  min={0}
+                                  id="paidFees"
+                                  placeholder="Paid Fees"
+                                  {...register("paidFees", {
+                                    required: true,
+                                  })}
+                                  required={true}
+                                  // onChange={handlePatientLoginIDChange}
+                                />
+                              </div>
+                              <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label className="form__label" for="remFees">
+                                  Remaining Fees{" "}
+                                </label>
+                                <input
+                                  className="form-control"
+                                  type="number"
+                                  min={0}
+                                  id="remFees"
+                                  placeholder="Remaining Fees"
+                                  {...register("remFees", { required: true })}
+                                  // required={true}
+                                  // onChange={handlePatientLoginIDChange}
+                                />
+                              </div>
                             </div>
-                            {/* <div class="footer">
+
+                            <div className="row">
+                              <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
+                                <label className="form__label" for="fileUrl">
+                                  Upload File{" "}
+                                </label>
+                                <input
+                                  className="form-control"
+                                  type="file"
+                                  id="fileUrl"
+                                  placeholder="Select file"
+                                  {...register("fileUrl")}
+                                  // required={true}
+                                  onChange={handleFileUpload}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="footer">
+                            <input
+                              type="submit"
+                              class="btn"
+                              title="Submit"
+                              // onClick={handleSubmit}
+                            ></input>
+                          </div>
+                          {/* <div class="footer">
                               <div
                                 class="btn bg-gradient-dark mb-0"
 
@@ -473,20 +470,20 @@ const NewAppointment = ({
                                 Add New Card
                               </div>
                             </div> */}
-                          </form>
-                        </div>
+                        </form>
                       </div>
                     </div>
                   </div>
-                  <span className="error-message centered">
-                    {/* {error?.password && error?.password} */}
-                    {error}
-                  </span>
-
-                  <span className="success-message centered">
-                    {message && message}
-                  </span>
                 </div>
+                <span className="error-message centered">
+                  {/* {error?.password && error?.password} */}
+                  {error}
+                </span>
+
+                <span className="success-message centered">
+                  {message && message}
+                </span>
+                {/* </div> */}
               </div>
 
               {/* <div class="row">

@@ -6,13 +6,18 @@ import viteLogo from "/vite.svg";
 
 import Layout from "./components/Layout";
 import Dashboard from "./components/admin/Dashboard";
+import CreateBlog from "./components/admin/CreateBlog";
 import DashboardPatient from "./components/patient/Dashboard";
 import DashboardDoctor from "./components/doctor/Dashboard";
 import PatientRegistration from "./components/patient/PatientRegistration";
 import DoctorRegistration from "./components/doctor/DoctorRegistration";
 import DoctorAppointment from "./components/doctor/AppointmentCopy";
 import DoctorPreviousAppointment from "./components/doctor/PreviousAppointments";
+import DoctorBlogs from "./components/blogs/blog";
 import SignIn from "./components/login/login";
+import BlogsAll from "./components/blogs/blogsAll";
+import Blog from "./components/blogs/blog";
+
 import { getKey } from "./components/utils/commonFunctions";
 
 // import SideMenu from "./components/SideMenu";
@@ -94,6 +99,10 @@ function App() {
           path="/doctor/previous-appointment"
           element={<DoctorPreviousAppointment />}
         ></Route>
+        <Route exact path="/doctor/blogs" element={<DoctorBlogs />}></Route>
+        <Route exact path="/admin/create-blog" element={<CreateBlog />}></Route>
+        <Route exact path="/blogs/blogsAll" element={<BlogsAll />}></Route>
+        <Route exact path="/blogs/blog" element={<Blog />}></Route>
       </Routes>
     </Router>
   );

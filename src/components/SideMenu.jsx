@@ -31,6 +31,10 @@ const MENU_DOCTOR = [
     pathname: "/doctor/previous-appointment",
     // pathname: "/doctor/registration",
   },
+  {
+    menu_name: "Blogs",
+    pathname: "/blogs/blogsAll",
+  },
 ];
 const MENU_PATIENT = [
   {
@@ -52,16 +56,16 @@ const MENU_ADMIN = [
     pathname: "dashboard",
   },
   {
-    menu_name: "Create Appointment",
-    pathname: "/doctor/registration",
-  },
-  {
     menu_name: "Doctor Activation",
     pathname: "/doctor/registration",
   },
   {
     menu_name: "Change Password",
     pathname: "/patient/registration",
+  },
+  {
+    menu_name: "Create Blog",
+    pathname: "/admin/create-blog",
   },
 ];
 
