@@ -33,18 +33,70 @@ const getUser = async (_type, id) => {
   }
 };
 
+// DOCTOR DASH
 const getAppointmentData = async (_path, _date, user_id, operator, _date2) => {
-  console.log({ _path, _date });
+  console.log({ _path, _date, user_id, operator, _date2 });
   try {
     let _data = {
       doc_id: user_id,
-      visit_date: moment(_date).format("yyyy-MM-DD"),
+      visit_date: _date ? moment(_date).format("yyyy-MM-DD") : null,
       equality: operator,
       visit_date2: _date2 ? moment(_date2).format("yyyy-MM-DD") : null,
     };
 
     console.log("ABHIII", { _data });
     let res = await fetch(SERVER_PATH + `/api/doctor/${_path}`, {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(_data),
+    });
+    let result = await res.json();
+    console.log("CALL RES", { result });
+    return result;
+  } catch (e) {
+    console.log({ e });
+  }
+};
+
+// PATIENT DASH
+const getPatientAppointmentData = async (pat_id, _date, _date2) => {
+  try {
+    let _data = {
+      pat_id: pat_id,
+      visit_date: _date ? moment(_date).format("yyyy-MM-DD") : null,
+      visit_date2: _date2 ? moment(_date2).format("yyyy-MM-DD") : null,
+    };
+
+    console.log("ABHIII", { _data });
+    let res = await fetch(SERVER_PATH + `/api/doctor/getAppointmentByPatient`, {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(_data),
+    });
+    let result = await res.json();
+    console.log({ result });
+    return result;
+  } catch (e) {
+    console.log({ e });
+  }
+};
+// ADMIN DASH
+const getAdminAppointmentData = async (visit_id, _date, _date2) => {
+  try {
+    let _data = {
+      visit_id: visit_id,
+      visit_date: _date ? moment(_date).format("yyyy-MM-DD") : null,
+      visit_date2: _date2 ? moment(_date2).format("yyyy-MM-DD") : null,
+    };
+
+    console.log("ABHIII", { _data });
+    let res = await fetch(SERVER_PATH + `/api/doctor/getAppointment`, {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -60,4 +112,12 @@ const getAppointmentData = async (_path, _date, user_id, operator, _date2) => {
   }
 };
 
-export { storeKey, removeKey, getKey, getUser, getAppointmentData };
+export {
+  storeKey,
+  removeKey,
+  getKey,
+  getUser,
+  getAppointmentData,
+  getAdminAppointmentData,
+  getPatientAppointmentData,
+};

@@ -4,6 +4,7 @@ import SideMenu from "../SideMenu";
 import Header from "../Header";
 import { Link, useLocation } from "react-router-dom";
 import moment from "moment";
+import { SERVER_PATH } from "../../../config";
 
 const blog = ({ type }) => {
   const location = useLocation();
@@ -80,25 +81,27 @@ const blog = ({ type }) => {
                       <div class="card h-100 p-3">
                         <div
                           class="overflow-hidden position-relative border-radius-lg bg-cover h-100"
-                          style={{
-                            backgroundImage: "url('./img/ivancik.jpg')",
-                          }}
+                          // style={{
+                          //   backgroundImage: `url('${SERVER_PATH}${articleData?.photo}}')`,
+                          // }}
                         >
                           <div class="col-lg-12 ms-auto text-center mt-5 mt-lg-0">
-                            <div class="bg-gradient-primary border-radius-lg h-100">
-                              <img
-                                src="./img/shapes/waves-white.svg"
+                            {/* <div class="bg-gradient-primary border-radius-lg h-100"> */}
+                            {/* <img
+                                src={`${SERVER_PATH}${articleData.photo}`}
                                 class="position-absolute h-100 w-50 top-0 d-lg-block d-none"
                                 alt="waves"
-                              />
-                              <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                              /> */}
+                            <div class="position-relative d-flex align-items-center justify-content-center h-100">
+                              {articleData.photo ? (
                                 <img
                                   class="w-100 position-relative z-index-2 pt-4"
-                                  src="./img/illustrations/rocket-white.png"
-                                  alt="rocket"
+                                  src={`${SERVER_PATH}${articleData.photo}`}
+                                  alt="Not Available"
                                 />
-                              </div>
+                              ) : null}
                             </div>
+                            {/* </div> */}
                           </div>
                         </div>
                       </div>

@@ -34,6 +34,11 @@ const MENU_DOCTOR = [
   {
     menu_name: "Blogs",
     pathname: "/blogs/blogsAll",
+    state: { type: 1 },
+  },
+  {
+    menu_name: "Notes",
+    pathname: "/notes/notesAll",
   },
 ];
 const MENU_PATIENT = [
@@ -42,12 +47,14 @@ const MENU_PATIENT = [
     pathname: "dashboard",
   },
   {
-    menu_name: "Appointment History",
-    pathname: "/doctor/registration",
+    menu_name: "Previous Appointments",
+    pathname: "/patient/previous-appointment",
   },
   {
-    menu_name: "All Events/ Blogs",
-    pathname: "/patient/registration",
+    menu_name: "Blogs",
+    pathname: "/blogs/blogsAll",
+    state: { type: 2 },
+    // state: { type: "patient" },
   },
 ];
 const MENU_ADMIN = [
@@ -56,16 +63,24 @@ const MENU_ADMIN = [
     pathname: "dashboard",
   },
   {
-    menu_name: "Doctor Activation",
+    menu_name: "Create Doctor",
     pathname: "/doctor/registration",
   },
   {
+    menu_name: "Doctor Activation",
+    pathname: "/doctor/doctor-activation",
+  },
+  {
     menu_name: "Change Password",
-    pathname: "/patient/registration",
+    pathname: "/doctor/change-password",
   },
   {
     menu_name: "Create Blog",
     pathname: "/admin/create-blog",
+  },
+  {
+    menu_name: "Create Note",
+    pathname: "/admin/create-note",
   },
 ];
 
@@ -154,6 +169,7 @@ const SideMenu = () => {
                         ? `/${path}/${item.pathname}`
                         : `${item.pathname}`
                     }
+                    state={item?.state ? item?.state : null}
                   >
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                       <svg

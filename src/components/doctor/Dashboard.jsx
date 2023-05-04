@@ -10,6 +10,7 @@ import Header from "../Header";
 import { SERVER_PATH } from "../../../config";
 import moment from "moment";
 import BlogViewer from "../blogs/BlogViewer";
+import Note from "../notes/Note";
 
 const Dashboard = () => {
   //   return <SideMenu />;
@@ -72,7 +73,7 @@ const Dashboard = () => {
         //Last Week
         let res3 = await getAppointmentData(
           "getAppointmentByDoctor",
-          moment(new Date()).subtract(6, "days"),
+          moment(new Date()).subtract(7, "days"),
           user?.user_id,
           "=",
           moment(new Date())
@@ -235,6 +236,7 @@ const Dashboard = () => {
             </div>
           </div>
           <BlogViewer type={1} userType="doctor" />
+          <Note type={1} userType="doctor" />
         </div>
       </main>
     </div>

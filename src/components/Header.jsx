@@ -5,7 +5,9 @@ import { Link, useLocation } from "react-router-dom";
 
 const ROUTE_ARRAY = {
   dashboard: ["/d/dashboard", "/a/dashboard"],
-  blog: ["/admin/create-blog", "/blogs/blog"],
+  blog: ["/admin/create-blog", "/blogs/blog", "/blogs/blogsAll"],
+  note: ["/admin/create-note", "/notes/note", "/notes/notesAll"],
+  doctor: ["/doctor/registration"],
 };
 
 const Header = ({ setLoginFullName }) => {
@@ -77,6 +79,12 @@ const Header = ({ setLoginFullName }) => {
       _path = "Previous Appointment";
     } else if (ROUTE_ARRAY.blog.includes(location.pathname)) {
       _path = "Blog";
+    } else if (ROUTE_ARRAY.blog.includes(location.pathname)) {
+      _path = "Blog";
+    } else if (ROUTE_ARRAY.note.includes(location.pathname)) {
+      _path = "Note";
+    } else if (ROUTE_ARRAY.doctor.includes(location.pathname)) {
+      _path = "Create Doctor";
     }
 
     setSlag(_path);

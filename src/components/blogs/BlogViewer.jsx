@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import moment from "moment";
 import { SERVER_PATH } from "../../../config";
-
+const BLOGS_TO_SHOW_ON_DASH = 3;
 const BlogViewer = ({
   enableCreate = false,
   showFull = false,
@@ -11,6 +11,8 @@ const BlogViewer = ({
   articleID = null,
   userType = "admin",
 }) => {
+  console.log("BLOG VIEWR", { type, userType });
+  // let _type = type == "patient" ? 2 : type == "doctor" ? 1 : null;
   const [articleData, setArticleData] = useState(null);
   const location = useLocation();
   useEffect(() => {
@@ -32,6 +34,8 @@ const BlogViewer = ({
         id: articleID,
         type: type,
       };
+
+      console.log("CALLIN BLOG---", { _data });
       let res = await fetch(SERVER_PATH + "/api/blog/getArticles", {
         method: "post",
         headers: {
@@ -66,14 +70,15 @@ const BlogViewer = ({
               <div class="row">
                 {articleData?.map((item, inx) => {
                   if (!showFull) {
-                    if (inx < 3) {
+                    if (inx < BLOGS_TO_SHOW_ON_DASH) {
                       return (
                         <div class="col-xl-3 col-md-6 mb-xl-0 mb-4">
                           <div class="card card-blog card-plain">
                             <div class="position-relative">
                               <a class="d-block shadow-xl border-radius-xl">
                                 <img
-                                  src="./img/home-decor-1.jpg"
+                                  src={`${SERVER_PATH}${item.photo}`}
+                                  // src="./img/home-decor-1.jpg"
                                   alt="img-blur-shadow"
                                   class="img-fluid shadow border-radius-xl"
                                 />
@@ -107,7 +112,7 @@ const BlogViewer = ({
                           <div class="position-relative">
                             <a class="d-block shadow-xl border-radius-xl">
                               <img
-                                src="./img/home-decor-1.jpg"
+                                src={`${SERVER_PATH}${item.photo}`}
                                 alt="img-blur-shadow"
                                 class="img-fluid shadow border-radius-xl"
                               />

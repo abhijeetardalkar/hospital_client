@@ -137,6 +137,7 @@ const NewAppointment = ({
       };
       var form_data = new FormData();
       form_data.set("file", file);
+      form_data.append("folder", "patients");
       // form_data.set("fileName", file.name);
 
       // let res = await fetch(SERVER_PATH + "/upload", {
@@ -193,8 +194,17 @@ const NewAppointment = ({
     let file_url = null;
     if (_file) {
       file_url = await uplaodFile(_file);
+      console.log("Upload url", { file_url });
+      // return;
+      if (!file_url && file_url?.data?.status != "uploaded") {
+        setError("Some error!");
+        setTimeout(() => {
+          setError(null);
+        }, 2000);
+        return;
+      }
     }
-    console.log({ file_url });
+
     // return;
     let _data = {
       doc_id: user?.user_id,
@@ -208,7 +218,7 @@ const NewAppointment = ({
         data?.remFees != "" || data?.remFees != null
           ? parseInt(data?.remFees)
           : null,
-      file_url: null, //file_url, //
+      file_url: !file_url ? null : file_url?.data?.saveAs,
       remark: data?.remark || null,
       symptom_desc: data?.symptomDesc || null,
       treatment_desc: data?.treatmentDesc || null,

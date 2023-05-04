@@ -9,14 +9,20 @@ import Dashboard from "./components/admin/Dashboard";
 import CreateBlog from "./components/admin/CreateBlog";
 import DashboardPatient from "./components/patient/Dashboard";
 import DashboardDoctor from "./components/doctor/Dashboard";
+import DoctorActivation from "./components/doctor/DoctorActivation";
+import ChangePassword from "./components/doctor/ChangePassword";
 import PatientRegistration from "./components/patient/PatientRegistration";
 import DoctorRegistration from "./components/doctor/DoctorRegistration";
 import DoctorAppointment from "./components/doctor/AppointmentCopy";
 import DoctorPreviousAppointment from "./components/doctor/PreviousAppointments";
+import PatientPreviousAppointment from "./components/patient/PreviousAppointments";
 import DoctorBlogs from "./components/blogs/blog";
 import SignIn from "./components/login/login";
 import BlogsAll from "./components/blogs/blogsAll";
 import Blog from "./components/blogs/blog";
+import Note from "./components/notes/notes";
+import NotesAll from "./components/notes/notesAll";
+import CreateNote from "./components/admin/CreateNote";
 
 import { getKey } from "./components/utils/commonFunctions";
 
@@ -99,10 +105,28 @@ function App() {
           path="/doctor/previous-appointment"
           element={<DoctorPreviousAppointment />}
         ></Route>
+        <Route
+          exact
+          path="/patient/previous-appointment"
+          element={<PatientPreviousAppointment />}
+        ></Route>
+        <Route
+          exact
+          path="/doctor/doctor-activation"
+          element={<DoctorActivation />}
+        ></Route>
+        <Route
+          exact
+          path="/doctor/change-password"
+          element={<ChangePassword />}
+        ></Route>
         <Route exact path="/doctor/blogs" element={<DoctorBlogs />}></Route>
         <Route exact path="/admin/create-blog" element={<CreateBlog />}></Route>
         <Route exact path="/blogs/blogsAll" element={<BlogsAll />}></Route>
         <Route exact path="/blogs/blog" element={<Blog />}></Route>
+        <Route exact path="/notes/notes" element={<Note />}></Route>
+        <Route exact path="/notes/notesAll" element={<NotesAll />}></Route>
+        <Route exact path="/admin/create-note" element={<CreateNote />}></Route>
       </Routes>
     </Router>
   );

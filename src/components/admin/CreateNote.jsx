@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getKey, getUser } from "../utils/commonFunctions";
 import { useForm } from "react-hook-form";
 import moment from "moment";
@@ -12,11 +12,13 @@ const VISIBILITY_TYPE = [
   { key: 1, label: "Doctor" },
   { key: 2, label: "Patient" },
 ];
-const CreateBlog = () => {
+const CreateNote = () => {
   const [user, setUser] = useState(JSON.parse(getKey("user")));
 
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const [doctorList, setDoctorList] = useState(null);
+  const [selectedList, setSelectedList] = useState([]);
 
   const {
     register,
@@ -24,6 +26,7 @@ const CreateBlog = () => {
     reset,
     watch,
     setValue,
+    setError: setFError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -51,36 +54,29 @@ const CreateBlog = () => {
   const resetForm = () => {
     reset();
     // setPatientDetail(null);
+    setSelectedList([]);
   };
 
-  const getTreatmentData = async (_path, id, id2 = null) => {
-    try {
-      let _data = null;
-      if (!id2) {
-        _data = {
-          id: id,
-        };
-      } else {
-        _data = {
-          doc_id: id,
-          pat_id: id2,
-        };
-      }
-      let res = await fetch(SERVER_PATH + `/api/doctor/${_path}`, {
-        method: "post",
+  useEffect(() => {
+    async function a() {
+      //Todays
+      let res = await fetch(SERVER_PATH + `/api/doctor/allDoctors`, {
+        method: "get",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(_data),
       });
       let result = await res.json();
-      //   console.log({ result });
-      return result;
-    } catch (e) {
-      console.log({ e });
+      console.log({ result });
+      console.log("DOCTORS:::", { result });
+
+      if (result?.user_data?.length) {
+        setDoctorList(result?.user_data);
+      }
     }
-  };
+    a();
+  }, []);
 
   const uplaodFile = async (file) => {
     try {
@@ -137,39 +133,36 @@ const CreateBlog = () => {
 
     // console.log(data, { SERVER_PATH }, { error, message });
     console.log({ data });
-    let vtype = VISIBILITY_TYPE?.filter((crop) => crop.label == data?.type);
-    if (!vtype && !vtype?.length) return;
+    // let vtype = VISIBILITY_TYPE?.filter((crop) => crop.label == data?.type);
+    // if (!vtype && !vtype?.length) return;
     // setValue("vtype", vtype[0]?.key);
-    console.log("MODIFIED", { vtype, data });
+    console.log("MODIFIED", { selectedList, data, errors });
 
     let _file = data?.fileUrl?.length ? data?.fileUrl[0] : null;
     console.log(_file);
     let file_url = null;
-    if (_file) {
-      file_url = await uplaodFile(_file);
-      console.log("Upload url", { file_url });
-      // return;
-      if (!file_url && file_url?.data?.status != "uploaded") {
-        setError("Some error!");
-        setTimeout(() => {
-          setError(null);
-        }, 2000);
-        return;
-      }
-    }
+
     // return;
+    if (!selectedList || !selectedList?.length) {
+      setError("Please select doctors!");
+      // setFError("doc_list", "Doctors not selected!");
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
+      return;
+    }
+
     let _data = {
-      title: data?.title,
-      message: data?.message,
-      active: data?.active,
-      file_url: !file_url ? null : file_url?.data?.saveAs, //
-      type: vtype[0]?.key,
+      note: data?.note,
+      active: data?.active ? 1 : 0,
+      docIDs: selectedList?.map((itm) => itm.doc_id).join(),
+      idCount: selectedList.length,
       // date: data?.date,
-      date_to: data?.date_to,
+      date: data?.date_to,
     };
     console.log("PAYLOAD>>>>>", { _data });
     // return;
-    let res = await fetch(SERVER_PATH + "/api/blog/insertarticle", {
+    let res = await fetch(SERVER_PATH + "/api/note/insertnote", {
       method: "post",
       headers: {
         Accept: "application/json",
@@ -181,24 +174,55 @@ const CreateBlog = () => {
     console.log({ result });
 
     // if (result && result.hasOwnProperty() && !result.hasOwnProperty("error")) {
-    if (result && result?.article_data && result?.article_data?.length) {
-      setMessage("Blog Created Successfully");
+    if (result && result?.note_data && result?.note_data?.length) {
+      setMessage("Note Created Successfully");
       resetForm();
 
       setTimeout(() => {
         setMessage(null);
       }, 2000);
-    } else if (result?.article_data?.error.code == "ER_DUP_ENTRY") {
-      setError("Blog Creation Failed. Duplicate Entry");
-      setTimeout(() => {
-        setError(null);
-      }, 2000);
     } else {
-      setError("Blog Creation Failed");
+      setError("Note Creation Failed");
       setTimeout(() => {
         setError(null);
       }, 2000);
     }
+  };
+
+  const handleDocListChange = (e) => {
+    let _newID = e.target.value;
+    console.log("IDDDDD", _newID);
+
+    if (_newID == "all") {
+      setSelectedList(doctorList);
+      return;
+    } else if (_newID == "allrem") {
+      setSelectedList([]);
+      setValue("doc_list", "");
+      return;
+    } else if (_newID == "") {
+      return;
+    }
+
+    let alreadyExists = selectedList?.filter((itm) => itm.doc_id == _newID);
+    if (alreadyExists?.length > 0) return;
+    // setValue("vtype", e.target.key);
+
+    console.log({ doctorList });
+
+    let row = doctorList?.filter((itm) => itm.doc_id == _newID);
+    console.log({ row });
+    let _new_doc = {
+      doc_id: _newID,
+      first_name: row[0]?.first_name,
+      middle_name: row[0]?.middle_name,
+      last_name: row[0]?.last_name,
+    };
+
+    let _list = [...selectedList];
+    _list.push(_new_doc);
+    console.log({ _list });
+    setSelectedList(_list);
   };
   console.log({ error, message, user });
 
@@ -219,7 +243,7 @@ const CreateBlog = () => {
                       <div class="col-12">
                         {/* <div class="card mb-4"> */}
                         <div class="card-header pb-0">
-                          <h6 className="centered">New Blog </h6>
+                          <h6 className="centered">New Note </h6>
                         </div>
                         <div class="card-body px-0 pt-0 pb-2">
                           <div className="row">
@@ -286,7 +310,7 @@ const CreateBlog = () => {
                                           for="date_to"
                                         >
                                           {/* Show Upto Date{" "} */}
-                                          Blog Date
+                                          Note Date
                                         </label>
                                         <input
                                           className="form-control"
@@ -302,79 +326,130 @@ const CreateBlog = () => {
                                           // onChange={handleChange}
                                         />
                                       </div>
-                                    </div>
-
-                                    <div className="row">
                                       <div className="username  col-xl-6 col-sm-6 mb-xl-0 mb-4">
                                         <label
                                           className="form__label"
-                                          for="type"
+                                          for="doc_list"
                                         >
-                                          Visibility Type{" "}
+                                          Doctors{" "}
                                         </label>
                                         <select
                                           className="form-control"
-                                          // type="text"
+                                          // doc_list="text"
                                           // multiple={true}
-                                          id="type"
-                                          placeholder="type"
-                                          {...register("type")}
-                                          required={true}
+                                          id="doc_list"
+                                          // placeholder="doc_list"
+                                          // {...register("doc_list")}
+                                          // required={true}
                                           // onChange={handleChange}
                                           //   value={"Doctor"}
                                           onChange={(e) => {
-                                            console.log(e.target.value);
-                                            setValue("vtype", e.target.key);
+                                            handleDocListChange(e);
                                           }}
                                         >
-                                          {VISIBILITY_TYPE?.map((item) => {
-                                            return (
-                                              <option key={item.key}>
-                                                {item.label}
-                                              </option>
-                                            );
+                                          {doctorList?.map((item, inx) => {
+                                            let full_name = `${
+                                              item.first_name
+                                            } ${
+                                              item.middle_name
+                                                ? item.middle_name
+                                                : ""
+                                            } ${item.last_name}`;
+                                            if (inx == 0) {
+                                              return (
+                                                <>
+                                                  <option value={""}>
+                                                    {"Select"}
+                                                  </option>
+                                                  <option value={"all"}>
+                                                    {"Select All"}
+                                                  </option>
+                                                  <option value={"allrem"}>
+                                                    {"Remove All"}
+                                                  </option>
+
+                                                  <option value={""} disabled>
+                                                    {"───────────────────"}
+                                                  </option>
+
+                                                  <option value={item.doc_id}>
+                                                    {full_name}
+                                                  </option>
+                                                </>
+                                              );
+                                            } else {
+                                              return (
+                                                <option value={item.doc_id}>
+                                                  {full_name}
+                                                </option>
+                                              );
+                                            }
                                           })}
                                         </select>
                                       </div>
-                                      <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                                        <label
-                                          className="form__label"
-                                          for="fileUrl"
-                                        >
-                                          Upload File{" "}
-                                        </label>
-                                        <input
-                                          className="form-control"
-                                          type="file"
-                                          id="fileUrl"
-                                          placeholder="Select file"
-                                          {...register("fileUrl")}
-                                          // required={true}
-                                          onChange={handleFileUpload}
-                                        />
+                                    </div>
+
+                                    <div className="row">
+                                      <div className="username col-xl-12 col-sm-12 mb-xl-0 mb-4">
+                                        {selectedList?.map((docs, jx) => {
+                                          let full_name = `${docs.first_name} ${
+                                            docs.middle_name
+                                              ? docs.middle_name
+                                              : ""
+                                          } ${docs.last_name}`;
+                                          return (
+                                            <>
+                                              {" "}
+                                              <label
+                                                className="form__label mx-4"
+                                                for="doc_name"
+                                              >
+                                                <a
+                                                  class="mb-0 cursor-pointer"
+                                                  style={{ width: 1 }}
+                                                  onClick={(e) => {
+                                                    e.preventDefault();
+                                                    let _lst =
+                                                      selectedList.filter(
+                                                        (itm) =>
+                                                          itm.doc_id !=
+                                                          docs.doc_id
+                                                      );
+                                                    console.log({ _lst });
+                                                    setSelectedList(_lst);
+                                                  }}
+                                                >
+                                                  <i class="fas fa-minus mx-5"></i>
+                                                </a>
+                                                {"   "}
+                                                {full_name}
+                                              </label>
+                                            </>
+                                          );
+                                        })}
                                       </div>
                                     </div>
                                     <div className="row">
                                       <div className="username  col-xl-12 col-sm-12 mb-xl-0 mb-4">
                                         <label
                                           className="form__label"
-                                          for="title"
+                                          for="note"
                                         >
-                                          Blog Title{" "}
+                                          Note{" "}
                                         </label>
                                         <input
                                           className="form-control"
                                           // type="text"
                                           // multiple={true}
-                                          id="title"
-                                          placeholder="Blog Title"
-                                          {...register("title")}
+                                          id="note"
+                                          placeholder="Note"
+                                          {...register("note")}
                                           required={true}
                                           // onChange={handleChange}
                                         />
                                       </div>
                                     </div>
-                                    <div className="row">
+                                    {/* <div className="row">
                                       <div className="username  col-xl-12 col-sm-12 mb-xl-0 mb-4">
                                         <label
                                           className="form__label"
@@ -393,7 +468,7 @@ const CreateBlog = () => {
                                           // onChange={handleChange}
                                         />
                                       </div>
-                                    </div>
+                                    </div> */}
                                   </div>
                                   <div class="footer">
                                     <input
@@ -447,4 +522,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
+export default CreateNote;

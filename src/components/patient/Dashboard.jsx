@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
 import SideMenu from "../SideMenu";
-import { getKey, removeKey } from "../utils/commonFunctions";
+import {
+  getKey,
+  getPatientAppointmentData,
+  removeKey,
+} from "../utils/commonFunctions";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../Header";
+import BlogViewer from "../blogs/BlogViewer";
+import moment from "moment";
 const Dashboard = () => {
   //   return <SideMenu />;
+  const [patientAppointments, setPatientAppointments] = useState(null);
+  const [patientAppointmentsLastDay, setPatientAppointmentsLastDay] =
+    useState(null);
+  const [patientAppointmentsLastWeek, setPatientAppointmentsLastWeek] =
+    useState(null);
+
   console.log("loading dAsh");
   const navigate = useNavigate();
   const [userID, setUserID] = useState(null);
@@ -21,11 +33,58 @@ const Dashboard = () => {
       //     </Routes>
       //   </Router>
       // );
+    } else {
+      async function a() {
+        // Today
+        // let res = await getPatientAppointmentData(
+        //   user?.user_id,
+        //   moment(new Date()),
+        //   moment(new Date())
+        // );
+        // // console.log("ABBB LAST WEEK:::", { res });
+
+        // if (res?.history_data?.length) {
+        //   setPatientAppointments(res?.history_data);
+        // }
+        //Yesterday
+        // let res2 = await getPatientAppointmentData(
+        //   user?.user_id,
+        //   moment(new Date()).subtract(1, "days"),
+        //   moment(new Date())
+        // );
+        // // console.log("ABBB LAST WEEK:::", { res2 });
+
+        // if (res2?.history_data?.length) {
+        //   setPatientAppointmentsLastDay(res2?.history_data);
+        // }
+
+        // //Last Week
+        let res3 = await getPatientAppointmentData(
+          user?.user_id,
+          moment(new Date()).subtract(7, "days"),
+          moment(new Date())
+        );
+        console.log("ABBB LAST WEEK:::", { res3 });
+
+        if (res3?.history_data?.length) {
+          setPatientAppointmentsLastWeek(res3?.history_data);
+        }
+      }
+      a();
     }
-  });
+  }, []);
   if (!userID) {
     return null;
   }
+  const totalDoctorCollection = (patientData) => {
+    let amount_paid = 0,
+      amount_rem = 0;
+    patientData?.map((item, inx) => {
+      amount_paid += item.paid_fees;
+      amount_rem += item.remaining_fees;
+    });
+    return { paid: amount_paid, rem: amount_rem };
+  };
 
   return (
     <div class="g-sidenav-show  bg-gray-100">
@@ -43,12 +102,20 @@ const Dashboard = () => {
                     <div class="col-8">
                       <div class="numbers">
                         <p class="text-sm mb-0 text-capitalize font-weight-bold">
-                          Today's Money
+                          Money Paid (Due)
                         </p>
-                        <h5 class="font-weight-bolder mb-0">
-                          $53,000
-                          <span class="text-success text-sm font-weight-bolder">
-                            +55%
+                        <h5 class="font-weight-bolder mb-0 text-success">
+                          {
+                            totalDoctorCollection(patientAppointmentsLastWeek)
+                              .paid
+                          }
+                          <span class="text-danger text-sm font-weight-bolder">
+                            {"  "} (
+                            {
+                              totalDoctorCollection(patientAppointmentsLastWeek)
+                                .rem
+                            }
+                            )
                           </span>
                         </h5>
                       </div>
@@ -65,20 +132,23 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
               <div class="card">
                 <div class="card-body p-3">
                   <div class="row">
                     <div class="col-8">
                       <div class="numbers">
                         <p class="text-sm mb-0 text-capitalize font-weight-bold">
-                          Today's Users
+                          Last Appointment Remark
                         </p>
                         <h5 class="font-weight-bolder mb-0">
-                          2,300
-                          <span class="text-success text-sm font-weight-bolder">
+                          {patientAppointmentsLastWeek &&
+                          patientAppointmentsLastWeek?.length
+                            ? patientAppointmentsLastWeek[0]?.remark
+                            : ""}
+                          {/* <span class="text-success text-sm font-weight-bolder">
                             +3%
-                          </span>
+                          </span> */}
                         </h5>
                       </div>
                     </div>
@@ -94,7 +164,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            {/* <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
               <div class="card">
                 <div class="card-body p-3">
                   <div class="row">
@@ -122,7 +192,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div class="col-xl-3 col-sm-6">
               <div class="card">
                 <div class="card-body p-3">
@@ -130,13 +200,19 @@ const Dashboard = () => {
                     <div class="col-8">
                       <div class="numbers">
                         <p class="text-sm mb-0 text-capitalize font-weight-bold">
-                          Sales
+                          Next Visit Date
                         </p>
                         <h5 class="font-weight-bolder mb-0">
-                          $103,430
-                          <span class="text-success text-sm font-weight-bolder">
+                          {patientAppointmentsLastWeek &&
+                          patientAppointmentsLastWeek?.length &&
+                          patientAppointmentsLastWeek[0]?.next_visit_date
+                            ? moment(
+                                patientAppointmentsLastWeek[0]?.next_visit_date
+                              ).format("DD MMM yyyy")
+                            : ""}
+                          {/* <span class="text-success text-sm font-weight-bolder">
                             +5%
-                          </span>
+                          </span> */}
                         </h5>
                       </div>
                     </div>
@@ -153,52 +229,10 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div class="row mt-4">
-            <div class="col-lg-7 mb-lg-0 mb-4">
-              <div class="card">
-                <div class="card-body p-3">
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="d-flex flex-column h-100">
-                        <p class="mb-1 pt-2 text-bold">Built by developers</p>
-                        <h5 class="font-weight-bolder">Soft UI Dashboard</h5>
-                        <p class="mb-5">
-                          From colors, cards, typography to complex elements,
-                          you will find the full documentation.
-                        </p>
-                        <a
-                          class="text-body text-sm font-weight-bold mb-0 icon-move-right mt-auto"
-                          href="javascript:;"
-                        >
-                          Read More
-                          <i
-                            class="fas fa-arrow-right text-sm ms-1"
-                            aria-hidden="true"
-                          ></i>
-                        </a>
-                      </div>
-                    </div>
-                    <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-                      <div class="bg-gradient-primary border-radius-lg h-100">
-                        <img
-                          src="/img/shapes/waves-white.svg"
-                          class="position-absolute h-100 w-50 top-0 d-lg-block d-none"
-                          alt="waves"
-                        />
-                        <div class="position-relative d-flex align-items-center justify-content-center h-100">
-                          <img
-                            class="w-100 position-relative z-index-2 pt-4"
-                            src="/img/illustrations/rocket-white.png"
-                            alt="rocket"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* <div class="col-lg-5">
+
+          <BlogViewer type={2} userType="doctor" />
+
+          {/* <div class="col-lg-5">
           <div class="card h-100 p-3">
             <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('../assets/img/ivancik.jpg');">
               <span class="mask bg-gradient-dark"></span>
@@ -213,7 +247,6 @@ const Dashboard = () => {
             </div>
           </div>
         </div> */}
-          </div>
         </div>
       </main>
     </div>

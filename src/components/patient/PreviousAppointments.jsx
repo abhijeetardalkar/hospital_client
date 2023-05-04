@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { getAppointmentData, getKey } from "../utils/commonFunctions";
+import {
+  getAppointmentData,
+  getKey,
+  getPatientAppointmentData,
+} from "../utils/commonFunctions";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import SideMenu from "../SideMenu";
 import Header from "../Header";
-import PatientDetail from "./PatientDetail";
+import PatientDetail from "../doctor/PatientDetail";
 
 const PreviousAppointments = () => {
   const [user, setUser] = useState(null);
@@ -29,11 +33,9 @@ const PreviousAppointments = () => {
     } else {
       async function a() {
         //Last Week
-        let res3 = await getAppointmentData(
-          "getAppointmentByDoctor",
-          moment(new Date()).subtract(30, "days"),
+        let res3 = await getPatientAppointmentData(
           user?.user_id,
-          "=",
+          moment(new Date()).subtract(30, "days"),
           moment(new Date())
         );
         // console.log("ABBB LAST WEEK:::", { res3 });
@@ -77,7 +79,7 @@ const PreviousAppointments = () => {
                         <thead>
                           <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                              Patient Name
+                              Doctor Name
                             </th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                               Symptom
@@ -97,9 +99,7 @@ const PreviousAppointments = () => {
                               !item.remaining_fees || item.remaining_fees == 0
                                 ? false
                                 : true;
-                            let full_name = `${item?.first_name} ${
-                              item?.middle_name ? item?.middle_name : ""
-                            } ${item?.last_name}`;
+                            let full_name = `${item?.doc_name}`;
 
                             return (
                               <tr>
@@ -254,13 +254,13 @@ const PreviousAppointments = () => {
                             <div class="d-flex">
                               <div class="me-4">
                                 <p class="text-white text-sm opacity-8 mb-0">
-                                  Patient Name
+                                  Doctor Name
                                 </p>
                                 <h6 class="text-white mb-0">
                                   {selectedPatient?.full_name}
                                 </h6>
                               </div>
-                              <div>
+                              {/* <div>
                                 <p class="text-white text-sm opacity-8 mb-0">
                                   DoB
                                 </p>
@@ -269,7 +269,7 @@ const PreviousAppointments = () => {
                                     "DD-MM-yyyy"
                                   )}
                                 </h6>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>
