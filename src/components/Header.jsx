@@ -8,6 +8,11 @@ const ROUTE_ARRAY = {
   blog: ["/admin/create-blog", "/blogs/blog", "/blogs/blogsAll"],
   note: ["/admin/create-note", "/notes/note", "/notes/notesAll"],
   doctor: ["/doctor/registration"],
+  password: [
+    "/admin/change-password",
+    "/patient/change-password",
+    "/doctor/change-password",
+  ],
 };
 
 const Header = ({ setLoginFullName }) => {
@@ -85,6 +90,8 @@ const Header = ({ setLoginFullName }) => {
       _path = "Note";
     } else if (ROUTE_ARRAY.doctor.includes(location.pathname)) {
       _path = "Create Doctor";
+    } else if (ROUTE_ARRAY.password.includes(location.pathname)) {
+      _path = "Password Change";
     }
 
     setSlag(_path);

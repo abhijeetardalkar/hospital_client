@@ -63,7 +63,7 @@ const MENU_PATIENT = [
   },
   {
     menu_name: "Change Password",
-    pathname: "/doctor/change-password",
+    pathname: "/patient/change-password",
   },
 ];
 const MENU_ADMIN = [
@@ -90,7 +90,7 @@ const MENU_ADMIN = [
   },
   {
     menu_name: "Change Password",
-    pathname: "/doctor/change-password",
+    pathname: "/admin/change-password",
   },
 ];
 
@@ -472,7 +472,7 @@ const SideMenu = () => {
                 backgroundImage: 'url("./img/curved-images/white-curved.jpg")',
               }}
             ></div>
-            <div class="card-body text-start p-3 w-100">
+            {/* <div class="card-body text-start p-3 w-100">
               <div class="icon icon-shape icon-sm bg-white shadow text-center mb-3 d-flex align-items-center justify-content-center border-radius-md">
                 <i
                   class="ni ni-diamond text-dark text-gradient text-lg top-0"
@@ -491,7 +491,7 @@ const SideMenu = () => {
                   Documentation
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </aside>

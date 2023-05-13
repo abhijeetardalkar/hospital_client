@@ -55,7 +55,7 @@ const BlogViewer = ({
       console.log(e);
     }
   };
-  console.log("ABHIJETT", { articleData, showFull });
+  // console.log("ABHIJETT", { articleData, showFull });
   return (
     // <div class="container-fluid py-4">
     <div class="row">
@@ -93,12 +93,20 @@ const BlogViewer = ({
                               </a>
                               <p class="mb-4 text-sm">{item.message}</p>
                               <div class="d-flex align-items-center justify-content-between">
-                                <button
+                                {/* <button
                                   type="button"
                                   class="btn btn-outline-primary btn-sm mb-0"
                                 >
                                   View Blog
-                                </button>
+                                </button> */}
+                                <Link
+                                  to={"/blogs/blog"}
+                                  state={{ articleData: articleData[inx] }}
+                                  type="button"
+                                  class="btn btn-outline-primary btn-sm mb-0"
+                                >
+                                  View Blog
+                                </Link>
                               </div>
                             </div>
                           </div>

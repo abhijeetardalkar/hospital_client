@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import SideMenu from "../SideMenu";
-import Header from "../Header";
+
 import { useForm } from "react-hook-form";
-import { getKey } from "../utils/commonFunctions";
-import { SERVER_PATH } from "../../../config";
+import { getKey } from "./utils/commonFunctions";
+import { SERVER_PATH } from "../../config";
+import SideMenu from "./SideMenu";
+import Header from "./Header";
 
 const ChangePassword = () => {
   const [user, setUser] = useState(JSON.parse(getKey("user")));

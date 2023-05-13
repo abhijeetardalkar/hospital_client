@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import SideMenu from "../SideMenu";
 import Header from "../Header";
 import PatientDetail from "../doctor/PatientDetail";
+import { SERVER_PATH } from "../../../config";
 
 const PreviousAppointments = () => {
   const [user, setUser] = useState(null);
@@ -84,6 +85,9 @@ const PreviousAppointments = () => {
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                               Symptom
                             </th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                              Prescription File
+                            </th>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                               Payment Status
                             </th>
@@ -127,6 +131,18 @@ const PreviousAppointments = () => {
                                   <p class="text-xs text-secondary mb-0">
                                     {item?.remark}{" "}
                                   </p>
+                                </td>
+                                <td>
+                                  {item?.file_url && (
+                                    <a
+                                      class="text-xs font-weight-bold mb-0"
+                                      href={SERVER_PATH + item?.file_url}
+                                      target="_blank"
+                                    >
+                                      {/* {item?.file_url} */}
+                                      View
+                                    </a>
+                                  )}
                                 </td>
                                 <td class="align-middle text-center text-sm">
                                   <span

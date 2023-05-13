@@ -10,7 +10,7 @@ import CreateBlog from "./components/admin/CreateBlog";
 import DashboardPatient from "./components/patient/Dashboard";
 import DashboardDoctor from "./components/doctor/Dashboard";
 import DoctorActivation from "./components/doctor/DoctorActivation";
-import ChangePassword from "./components/doctor/ChangePassword";
+import PasswordChange from "./components/doctor/PasswordChange";
 import PatientRegistration from "./components/patient/PatientRegistration";
 import DoctorRegistration from "./components/doctor/DoctorRegistration";
 import DoctorAppointment from "./components/doctor/AppointmentCopy";
@@ -23,6 +23,7 @@ import Blog from "./components/blogs/blog";
 import Note from "./components/notes/notes";
 import NotesAll from "./components/notes/notesAll";
 import CreateNote from "./components/admin/CreateNote";
+// import ChangePassword from "./components/ChangePassword";
 
 import { getKey } from "./components/utils/commonFunctions";
 
@@ -118,7 +119,17 @@ function App() {
         <Route
           exact
           path="/doctor/change-password"
-          element={<ChangePassword />}
+          element={<PasswordChange />}
+        ></Route>
+        <Route
+          exact
+          path="/patient/change-password"
+          element={<PasswordChange />}
+        ></Route>
+        <Route
+          exact
+          path="/admin/change-password"
+          element={<PasswordChange />}
         ></Route>
         <Route exact path="/doctor/blogs" element={<DoctorBlogs />}></Route>
         <Route exact path="/admin/create-blog" element={<CreateBlog />}></Route>
