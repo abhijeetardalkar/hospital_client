@@ -31,6 +31,7 @@ const MENU_DOCTOR = [
     pathname: "/doctor/previous-appointment",
     // pathname: "/doctor/registration",
   },
+
   {
     menu_name: "Blogs",
     pathname: "/blogs/blogsAll",
@@ -39,6 +40,10 @@ const MENU_DOCTOR = [
   {
     menu_name: "Notes",
     pathname: "/notes/notesAll",
+  },
+  {
+    menu_name: "Change Password",
+    pathname: "/doctor/change-password",
   },
 ];
 const MENU_PATIENT = [
@@ -56,6 +61,10 @@ const MENU_PATIENT = [
     state: { type: 2 },
     // state: { type: "patient" },
   },
+  {
+    menu_name: "Change Password",
+    pathname: "/doctor/change-password",
+  },
 ];
 const MENU_ADMIN = [
   {
@@ -70,10 +79,7 @@ const MENU_ADMIN = [
     menu_name: "Doctor Activation",
     pathname: "/doctor/doctor-activation",
   },
-  {
-    menu_name: "Change Password",
-    pathname: "/doctor/change-password",
-  },
+
   {
     menu_name: "Create Blog",
     pathname: "/admin/create-blog",
@@ -81,6 +87,10 @@ const MENU_ADMIN = [
   {
     menu_name: "Create Note",
     pathname: "/admin/create-note",
+  },
+  {
+    menu_name: "Change Password",
+    pathname: "/doctor/change-password",
   },
 ];
 
