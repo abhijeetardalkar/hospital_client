@@ -390,6 +390,7 @@ const CreateBlog = () => {
                                           placeholder="Message"
                                           {...register("message")}
                                           required={true}
+                                          rows={5}
                                           // onChange={handleChange}
                                         />
                                       </div>

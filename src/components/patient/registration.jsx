@@ -2,6 +2,51 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { SERVER_PATH } from "../../../config";
 import Header from "../Header";
+// import { joiResolver } from "@hookform/resolvers/joi";
+import { yupResolver } from "@hookform/resolvers/yup";
+// import Joi from "joi";
+import * as yup from "yup";
+// const schema2 = Joi.object({
+//   firstName: Joi.string().required(),
+//   email: Joi.string().email().required(),
+// });
+
+const schema = yup
+  .object()
+  .shape({
+    loginID: yup
+      .string()
+      .matches(new RegExp(/^[A-Z 0-1_]+$/i))
+      .required(),
+    firstName: yup
+      .string({ message: "Need to be string" })
+      .required({ message: "Cannot be empty" })
+      .matches(new RegExp(/^[A-Z]+$/i)),
+    middleName: yup
+      .string()
+      .matches(new RegExp(/^[A-Z ]+$/i))
+      .required(),
+    lastName: yup
+      .string()
+      .matches(new RegExp(/^[A-Z ]+$/i))
+      .required(),
+    // .matches(new RegExp(/a-zA-z/))
+    email: yup.string().email().required(),
+    password: yup
+      .string()
+      .matches(
+        new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+      )
+      .required(),
+    confirmPassword: yup
+      .string()
+      .matches(
+        new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+      )
+      .required(),
+    mobile: yup.string().matches(new RegExp(/^\d{10}$/)),
+  })
+  .required();
 
 const registration = () => {
   const [error, setError] = useState(null);
@@ -13,7 +58,10 @@ const registration = () => {
     reset,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    // resolver: joiResolver(schema2),
+    resolver: yupResolver(schema),
+  });
   const onSubmit = async (data) => {
     let _error = {};
     if (data?.password != data?.confirmPassword) {
@@ -86,7 +134,7 @@ const registration = () => {
       }, 2000);
     }
   };
-  console.log({ error, message });
+  console.log({ error, message, errors });
   //   const handleSubmit = () => {
   //     console.log("data: ", data);
   //     let formm = document.getElementById("regform");
@@ -152,16 +200,23 @@ const registration = () => {
                             <label className="form__label" for="firstName">
                               First Name{" "}
                             </label>
+
                             <input
                               className="form-control"
                               type="text"
+                              name="firstName"
                               id="firstName"
-                              placeholder="First Name"
-                              {...register("firstName", { required: true })}
+                              placeholder="First Name ad"
+                              {...register("firstName", {
+                                // required: true,
+                              })}
                               // required={true}
                               // onChange={handleChange}
                             />
                           </div>
+                          {/* {errors?.errors?.firstName?.message?.message && (
+                            <p>{errors?.errors?.firstName?.message?.message}</p>
+                          )} */}
                         </div>
                         <div className="row">
                           <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">
