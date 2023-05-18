@@ -41,7 +41,7 @@ const Note = ({
   }, []);
   return (
     // <div class="container-fluid py-4">
-    <div class="row">
+    <div class="row" style={{ minHeight: "600px" }}>
       <div class="col-12 col-xl-12">
         <div class="card h-100">
           <div class="card-header pb-0 p-3">

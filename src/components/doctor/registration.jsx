@@ -28,6 +28,14 @@ const SPECIALTY = [
     id: 6,
     label: "Ophthalmology",
   },
+  {
+    id: 6,
+    label: "Cardiology",
+  },
+  {
+    id: 6,
+    label: "Ophthalmology",
+  },
 ];
 
 const registration = () => {
@@ -99,13 +107,13 @@ const registration = () => {
     // console.log({ result });
 
     // if (result && result.hasOwnProperty() && !result.hasOwnProperty("error")) {
-    if (result && result?.pat_data && result?.pat_data?.length) {
+    if (result && result?.doc_data && result?.doc_data?.length) {
       setMessage("Doctor Inserted Successfully");
       reset();
       setTimeout(() => {
         setMessage(null);
       }, 2000);
-    } else if (result?.pat_data?.error.code == "ER_DUP_ENTRY") {
+    } else if (result?.doc_data?.error.code == "ER_DUP_ENTRY") {
       setError("Doctor Insertion Failed. Duplicate Entry");
       setTimeout(() => {
         setError(null);
@@ -265,6 +273,8 @@ const registration = () => {
                                 id="mobile"
                                 className="form-control"
                                 placeholder="Mobile"
+                                maxLength={10}
+                                minLength={10}
                                 {...register("mobile")}
                                 // onChange={handleChange}
                               />

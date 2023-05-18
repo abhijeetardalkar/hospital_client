@@ -58,7 +58,7 @@ const BlogViewer = ({
   // console.log("ABHIJETT", { articleData, showFull });
   return (
     // <div class="container-fluid py-4">
-    <div class="row">
+    <div class="row" style={{ minHeight: "600px" }}>
       <div class="col-12 mt-4">
         <div class="card mb-4">
           <div class="card-header pb-0 p-3">

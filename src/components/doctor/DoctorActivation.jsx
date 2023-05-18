@@ -165,7 +165,7 @@ const DoctorActivation = () => {
       <SideMenu type={"doctor"} />
       <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <Header type={"doctor"}></Header>
-        <div class="container-fluid py-4">
+        <div class="container-fluid py-4" style={{ minHeight: "600px" }}>
           <div class="row">
             <div class="col-lg-12">
               <div class="row">

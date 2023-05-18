@@ -102,7 +102,7 @@ const login = () => {
       }, 2000);
     }
   };
-  console.log({ userType });
+  // console.log({ userType });
   return (
     <>
       <main class="main-content  mt-0">

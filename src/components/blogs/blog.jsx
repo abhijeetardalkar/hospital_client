@@ -18,7 +18,7 @@ const blog = ({ type }) => {
           {/* <!-- Navbar --> */}
           <Header type={type}></Header>
           {/* <!-- End Navbar --> */}
-          <div class="container-fluid py-4">
+          <div class="container-fluid py-4" style={{ minHeight: "600px" }}>
             <div class="row">
               <div class="col-xl-12 col-sm-12 mb-xl-0 mb-4">
                 <div class="card">
