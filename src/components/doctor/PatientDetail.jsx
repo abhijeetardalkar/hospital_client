@@ -67,14 +67,14 @@ const PatientDetail = ({ patientDetail }) => {
                         <strong class="text-dark">Email:</strong> &nbsp;{" "}
                         {patientDetail?.email}
                       </li>
-                      <li class="list-group-item border-0 ps-0 text-sm">
+                      {/* <li class="list-group-item border-0 ps-0 text-sm">
                         <strong class="text-dark">Location:</strong> &nbsp;{" "}
                         {`${
                           patientDetail?.address ? patientDetail?.address : ""
                         } ${
                           patientDetail?.pincode ? patientDetail?.pincode : ""
                         }`}
-                      </li>
+                      </li> */}
                       {/* <li class="list-group-item border-0 ps-0 pb-0">
                         <strong class="text-dark text-sm">Social:</strong>{" "}
                         &nbsp;

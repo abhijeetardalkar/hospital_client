@@ -165,9 +165,9 @@ const registration = () => {
   //     setData(_data);
   //   };
   return (
-    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
       <Header type="patient" />
-      <div class="container-fluid py-4">
+      <div class="container-fluid py-4" style={{ minHeight: "600px" }}>
         <div class="row">
           <div class="col-12">
             <div class="card mb-4">

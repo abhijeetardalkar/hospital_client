@@ -4,7 +4,7 @@ import Registration from "./registration";
 import moment from "moment";
 import { useForm } from "react-hook-form";
 import Header from "../Header";
-import { getKey, getUser } from "../utils/commonFunctions";
+import { CARD_SPACE_HEIGHT, getKey, getUser } from "../utils/commonFunctions";
 import { SERVER_PATH } from "../../../config";
 import axios from "axios";
 const NEXT_VISIT_INTERVAL = 7;
@@ -194,7 +194,10 @@ const Appointment = () => {
       <SideMenu type="doctor" />
       <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <Header type="doctor" setLoginFullName={setLoginFullName} />
-        <div class="container-fluid py-4">
+        <div
+          class="container-fluid py-4"
+          style={{ minHeight: CARD_SPACE_HEIGHT }}
+        >
           <div class="row">
             <div class="col-12">
               <div class="card mb-4">

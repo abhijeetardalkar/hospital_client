@@ -1,6 +1,6 @@
 import moment from "moment";
 import { SERVER_PATH } from "../../../config";
-
+const CARD_SPACE_HEIGHT = 600;
 const storeKey = (key, value) => {
   localStorage.setItem(key, value);
 };
@@ -120,4 +120,5 @@ export {
   getAppointmentData,
   getAdminAppointmentData,
   getPatientAppointmentData,
+  CARD_SPACE_HEIGHT,
 };
