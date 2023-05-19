@@ -51,7 +51,7 @@ const NewAppointment = ({
     let _id = e.target.value;
     console.log({ _id });
     let _data = await getPatientDetail(_id);
-    console.log({ _data });
+    // console.log({ _data });
     if (_data) {
       setPatientDetail(_data);
 
@@ -312,7 +312,8 @@ const NewAppointment = ({
                                   placeholder="Login ID"
                                   {...register("loginID")}
                                   required={true}
-                                  onChange={handlePatientLoginIDChange}
+                                  // onChange={handlePatientLoginIDChange}
+                                  onBlur={handlePatientLoginIDChange}
                                 />
                               </div>
                               <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">

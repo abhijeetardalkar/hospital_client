@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAppointmentData, getKey } from "../utils/commonFunctions";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import SideMenu from "../SideMenu";
 import Header from "../Header";
 import PatientDetail from "./PatientDetail";
@@ -11,13 +11,15 @@ const PreviousAppointments = () => {
   const [user, setUser] = useState(null);
   const [appointmentData, setAppointmentData] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
+  const location = useLocation();
+  // console.log({ location });
+  const initData = async () => {
     let user = JSON.parse(getKey("user"));
     setUser(user || null);
 
-    // console.log({ user });
+    console.log({ user });
     if (!user || !user?.user_id) {
       navigate("/");
       // return (
@@ -30,22 +32,34 @@ const PreviousAppointments = () => {
     } else {
       async function a() {
         //Last Week
+        //adding "Decrypt==true" para to do it when necessary on the page
         let res3 = await getAppointmentData(
           "getAppointmentByDoctor",
           moment(new Date()).subtract(30, "days"),
           user?.user_id,
           "=",
-          moment(new Date())
+          moment(new Date()),
+          true
         );
         // console.log("ABBB LAST WEEK:::", { res3 });
 
         if (res3?.history_data?.length) {
           setAppointmentData(res3?.history_data);
+          setLoading(false);
+        } else {
+          setLoading(false);
         }
       }
       a();
     }
+  };
+  useEffect(() => {
+    // initData();
+  }, [location?.pathname]);
+  useEffect(() => {
+    initData();
   }, []);
+  console.log({ user });
   if (!user) {
     return null;
   }
@@ -72,119 +86,122 @@ const PreviousAppointments = () => {
                       : {}
                   }
                 >
-                  <div class="table-responsive p-0">
-                    {appointmentData?.length ? (
-                      <table class="table align-items-center mb-0">
-                        <thead>
-                          <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                              Patient Name
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                              Symptom
-                            </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                              Prescription File
-                            </th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                              Payment Status
-                            </th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                              Visit Date
-                            </th>
-                            <th class="text-secondary opacity-7"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {appointmentData?.map((item, inx) => {
-                            let isDue =
-                              !item.remaining_fees || item.remaining_fees == 0
-                                ? false
-                                : true;
-                            let full_name = `${item?.first_name} ${
-                              item?.middle_name ? item?.middle_name : ""
-                            } ${item?.last_name}`;
+                  {!loading ? (
+                    <div class="table-responsive p-0">
+                      {appointmentData?.length ? (
+                        <table class="table align-items-center mb-0">
+                          <thead>
+                            <tr>
+                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                Patient Name
+                              </th>
+                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Symptom
+                              </th>
+                              <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Prescription File
+                              </th>
+                              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                Payment Status
+                              </th>
+                              <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                Visit Date
+                              </th>
+                              <th class="text-secondary opacity-7"></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {appointmentData?.map((item, inx) => {
+                              let isDue =
+                                !item.remaining_fees || item.remaining_fees == 0
+                                  ? false
+                                  : true;
+                              let full_name = `${item?.first_name} ${
+                                item?.middle_name ? item?.middle_name : ""
+                              } ${item?.last_name}`;
 
-                            return (
-                              <tr>
-                                <td>
-                                  <div class="d-flex px-2 py-1">
-                                    <div>
-                                      <img
-                                        src="./img/team-2.jpg"
-                                        class="avatar avatar-sm me-3"
-                                        alt="user1"
-                                      />
+                              return (
+                                <tr>
+                                  <td>
+                                    <div class="d-flex px-2 py-1">
+                                      <div>
+                                        <img
+                                          src="./img/team-2.jpg"
+                                          class="avatar avatar-sm me-3"
+                                          alt="user1"
+                                        />
+                                      </div>
+                                      <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0 text-sm">
+                                          {full_name}
+                                        </h6>
+                                        <p class="text-xs text-secondary mb-0">
+                                          {item?.email}
+                                        </p>
+                                      </div>
                                     </div>
-                                    <div class="d-flex flex-column justify-content-center">
-                                      <h6 class="mb-0 text-sm">{full_name}</h6>
-                                      <p class="text-xs text-secondary mb-0">
-                                        {item?.email}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td>
-                                  <p class="text-xs font-weight-bold mb-0">
-                                    {item?.symptom_desc}
-                                  </p>
-                                  <p class="text-xs text-secondary mb-0">
-                                    {item?.remark}{" "}
-                                  </p>
-                                </td>
-                                <td>
-                                  {item?.file_url && (
-                                    <a
-                                      class="text-xs font-weight-bold mb-0"
-                                      href={SERVER_PATH + item?.file_url}
-                                      target="_blank"
+                                  </td>
+                                  <td>
+                                    <p class="text-xs font-weight-bold mb-0">
+                                      {item?.symptom_desc}
+                                    </p>
+                                    <p class="text-xs text-secondary mb-0">
+                                      {item?.remark}{" "}
+                                    </p>
+                                  </td>
+                                  <td>
+                                    {item?.file_url && (
+                                      <a
+                                        class="text-xs font-weight-bold mb-0"
+                                        href={SERVER_PATH + item?.file_url}
+                                        target="_blank"
+                                      >
+                                        {/* {item?.file_url} */}
+                                        View
+                                      </a>
+                                    )}
+                                  </td>
+                                  <td class="align-middle text-center text-sm">
+                                    <span
+                                      class={`badge badge-sm  ${
+                                        !isDue
+                                          ? "bg-gradient-success"
+                                          : "bg-gradient-danger"
+                                      }`}
                                     >
-                                      {/* {item?.file_url} */}
-                                      View
+                                      {!isDue ? "Clear" : "Due"}
+                                    </span>
+                                  </td>
+                                  <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">
+                                      {item?.visit_date
+                                        ? moment(item?.visit_date).format(
+                                            "DD MMM yyyy"
+                                          )
+                                        : ""}
+                                    </span>
+                                  </td>
+                                  <td class="align-middle">
+                                    <a
+                                      //   href="javascript:;"
+                                      class="text-secondary font-weight-bold text-xs cursor-pointer"
+                                      data-toggle="tooltip"
+                                      data-original-title="Edit user"
+                                      onClick={(e) => {
+                                        let _row = {
+                                          ...item,
+                                          full_name: full_name,
+                                        };
+                                        setSelectedPatient(_row);
+                                      }}
+                                    >
+                                      Show
                                     </a>
-                                  )}
-                                </td>
-                                <td class="align-middle text-center text-sm">
-                                  <span
-                                    class={`badge badge-sm  ${
-                                      !isDue
-                                        ? "bg-gradient-success"
-                                        : "bg-gradient-danger"
-                                    }`}
-                                  >
-                                    {!isDue ? "Clear" : "Due"}
-                                  </span>
-                                </td>
-                                <td class="align-middle text-center">
-                                  <span class="text-secondary text-xs font-weight-bold">
-                                    {item?.visit_date
-                                      ? moment(item?.visit_date).format(
-                                          "DD MMM yyyy"
-                                        )
-                                      : ""}
-                                  </span>
-                                </td>
-                                <td class="align-middle">
-                                  <a
-                                    //   href="javascript:;"
-                                    class="text-secondary font-weight-bold text-xs cursor-pointer"
-                                    data-toggle="tooltip"
-                                    data-original-title="Edit user"
-                                    onClick={(e) => {
-                                      let _row = {
-                                        ...item,
-                                        full_name: full_name,
-                                      };
-                                      setSelectedPatient(_row);
-                                    }}
-                                  >
-                                    Show
-                                  </a>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                          {/* <tr>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                            {/* <tr>
                           <td>
                             <div class="d-flex px-2 py-1">
                               <div>
@@ -229,16 +246,21 @@ const PreviousAppointments = () => {
                             </a>
                           </td>
                         </tr> */}
-                        </tbody>
-                      </table>
-                    ) : (
-                      <div>
-                        <p className="centered">
-                          No appointment history available!
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                          </tbody>
+                        </table>
+                      ) : (
+                        <div>
+                          <p className="centered">
+                            No appointment history available!
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div class="table-responsive p-4">
+                      <p>Loading...</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

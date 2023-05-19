@@ -1,11 +1,30 @@
 import React, { useEffect, useState } from "react";
-
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { getKey } from "./utils/commonFunctions";
 import { SERVER_PATH } from "../../config";
 import SideMenu from "./SideMenu";
 import Header from "./Header";
 
+const schema = yup
+  .object()
+  .shape({
+    password_new: yup
+      .string()
+      .matches(
+        new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+      )
+      .required(),
+    password_confirm: yup
+      .string()
+      .matches(
+        new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+      )
+      .required(),
+    mobile: yup.string().matches(new RegExp(/^\d{10}$/)),
+  })
+  .required();
 const ChangePassword = () => {
   const [user, setUser] = useState(JSON.parse(getKey("user")));
   const [type, setType] = useState(null);
@@ -24,10 +43,12 @@ const ChangePassword = () => {
     defaultValues: {
       // date_to: moment(new Date()).format("yyyy-MM-DD"),
       active: true,
+
       // date_to: moment(new Date())
       //   .add(NEXT_VISIT_INTERVAL, "days")
       //   .format("yyyy-MM-DD"),
     },
+    resolver: yupResolver(schema),
   });
 
   useEffect(() => {

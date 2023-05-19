@@ -96,11 +96,12 @@ const Dashboard = () => {
           setDoctorAppointments(res?.user_data);
           createGroup(res?.user_data);
         }
-        //Todays
+        //YESTERDAYS
         let res2 = await getAdminAppointmentData(
           null, //visit_id
           moment(new Date()).subtract(1, "days"),
-          new Date()
+          moment(new Date()).subtract(1, "days")
+          // new Date()
         );
         console.log("YESTERDAYS:::", { res2 });
 

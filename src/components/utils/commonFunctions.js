@@ -26,7 +26,7 @@ const getUser = async (_type, id) => {
       body: JSON.stringify(_data),
     });
     let result = await res.json();
-    //   console.log({ result });
+    // console.log({ result });
     return result;
   } catch (e) {
     console.log({ e });
@@ -34,17 +34,26 @@ const getUser = async (_type, id) => {
 };
 
 // DOCTOR DASH
-const getAppointmentData = async (_path, _date, user_id, operator, _date2) => {
-  console.log({ _path, _date, user_id, operator, _date2 });
+const getAppointmentData = async (
+  _path,
+  _date,
+  user_id,
+  operator,
+  _date2,
+  decrypt = false
+) => {
+  // console.log({ _path, _date, user_id, operator, _date2 });
   try {
     let _data = {
       doc_id: user_id,
       visit_date: _date ? moment(_date).format("yyyy-MM-DD") : null,
       equality: operator,
       visit_date2: _date2 ? moment(_date2).format("yyyy-MM-DD") : null,
+      decrypt,
     };
 
-    console.log("ABHIII", { _data });
+    // console.log("ABHIII", { _data });
+
     let res = await fetch(SERVER_PATH + `/api/doctor/${_path}`, {
       method: "post",
       headers: {
@@ -54,7 +63,7 @@ const getAppointmentData = async (_path, _date, user_id, operator, _date2) => {
       body: JSON.stringify(_data),
     });
     let result = await res.json();
-    console.log("CALL RES", { result });
+    // console.log("CALL RES", { result });
     return result;
   } catch (e) {
     console.log({ e });
@@ -70,7 +79,7 @@ const getPatientAppointmentData = async (pat_id, _date, _date2) => {
       visit_date2: _date2 ? moment(_date2).format("yyyy-MM-DD") : null,
     };
 
-    console.log("ABHIII", { _data });
+    // console.log("ABHIII", { _data });
     let res = await fetch(SERVER_PATH + `/api/doctor/getAppointmentByPatient`, {
       method: "post",
       headers: {
@@ -80,7 +89,7 @@ const getPatientAppointmentData = async (pat_id, _date, _date2) => {
       body: JSON.stringify(_data),
     });
     let result = await res.json();
-    console.log({ result });
+    // console.log({ result });
     return result;
   } catch (e) {
     console.log({ e });
@@ -95,7 +104,7 @@ const getAdminAppointmentData = async (visit_id, _date, _date2) => {
       visit_date2: _date2 ? moment(_date2).format("yyyy-MM-DD") : null,
     };
 
-    console.log("ABHIII", { _data });
+    // console.log("ABHIII", { _data });
     let res = await fetch(SERVER_PATH + `/api/doctor/getAppointment`, {
       method: "post",
       headers: {
@@ -105,7 +114,7 @@ const getAdminAppointmentData = async (visit_id, _date, _date2) => {
       body: JSON.stringify(_data),
     });
     let result = await res.json();
-    console.log({ result });
+    // console.log({ result });
     return result;
   } catch (e) {
     console.log({ e });

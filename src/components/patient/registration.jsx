@@ -6,6 +6,7 @@ import Header from "../Header";
 import { yupResolver } from "@hookform/resolvers/yup";
 // import Joi from "joi";
 import * as yup from "yup";
+import { getUser } from "../utils/commonFunctions";
 // const schema2 = Joi.object({
 //   firstName: Joi.string().required(),
 //   email: Joi.string().email().required(),
@@ -16,12 +17,13 @@ const schema = yup
   .shape({
     loginID: yup
       .string()
-      .matches(new RegExp(/^[A-Z 0-1_]+$/i))
+      .matches(new RegExp(/^[A-Za-z0-9_.]+$/))
       .required(),
     firstName: yup
       .string({ message: "Need to be string" })
       .required({ message: "Cannot be empty" })
-      .matches(new RegExp(/^[A-Z]+$/i)),
+      .matches(new RegExp(/^[A-Z ]+$/i)),
+    // .matches(new RegExp(/^[A-Z]+$/i)),
     middleName: yup
       .string()
       .matches(new RegExp(/^[A-Z ]+$/i))
@@ -58,6 +60,7 @@ const registration = () => {
     reset,
     watch,
     formState: { errors },
+    setValue,
   } = useForm({
     // resolver: joiResolver(schema2),
     resolver: yupResolver(schema),
@@ -67,7 +70,7 @@ const registration = () => {
     if (data?.password != data?.confirmPassword) {
       _error = "Password Mismatch";
       //   _error = { ..._error, password: "Password Mismatch" };
-      console.log("Error: ", { _error });
+      // console.log("Error: ", { _error });
       setError(_error);
       return;
     } else {
@@ -113,7 +116,7 @@ const registration = () => {
       body: JSON.stringify(_data),
     });
     let result = await res.json();
-    console.log({ result });
+    // console.log({ result });
 
     // if (result && result.hasOwnProperty() && !result.hasOwnProperty("error")) {
     if (result && result?.user_data && result?.user_data?.length) {
@@ -134,7 +137,32 @@ const registration = () => {
       }, 2000);
     }
   };
-  console.log({ error, message, errors });
+  const getPatientDetail = async (_id) => {
+    // console.log("AAHAHAH", { type });
+    let _type = "patient/getPatientByID";
+
+    let res = await getUser(_type, _id);
+    // console.log({ res });
+
+    if (res?.user_data?.length) {
+      // console.log("USER : ", res?.user_data[0]);
+      return res?.user_data[0];
+    } else {
+      return null;
+    }
+  };
+  const handleBlur = async () => {
+    let _id = document.getElementById("loginID").value;
+    // console.log({ _id });
+    let _data = await getPatientDetail(_id);
+    // console.log({ _data });
+    setValue("firstName", _data?.first_name);
+    setValue("middleName", _data?.middle_name);
+    setValue("lastName", _data?.last_name);
+    setValue("mobile", _data?.mobile);
+    setValue("email", _data?.email);
+  };
+  // console.log({ error, message, errors });
   //   const handleSubmit = () => {
   //     console.log("data: ", data);
   //     let formm = document.getElementById("regform");
@@ -194,6 +222,7 @@ const registration = () => {
                               {...register("loginID", { required: true })}
                               // required={true}
                               // onChange={handleChange}
+                              onBlur={handleBlur}
                             />
                           </div>
                           <div className="username col-xl-6 col-sm-6 mb-xl-0 mb-4">

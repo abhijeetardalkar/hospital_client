@@ -4,6 +4,7 @@ import { SERVER_PATH } from "../../../config";
 import Header from "../Header";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { getUser } from "../utils/commonFunctions";
 
 const SPECIALTY = [
   {
@@ -38,6 +39,10 @@ const SPECIALTY = [
     id: 6,
     label: "Ophthalmology",
   },
+  {
+    id: 7,
+    label: "General",
+  },
 ];
 
 const schema = yup
@@ -45,7 +50,8 @@ const schema = yup
   .shape({
     loginID: yup
       .string()
-      .matches(new RegExp(/^[A-Z 0-1_]+$/i))
+      // .matches(new RegExp(/^[A-Z 0-1_]+$/i))
+      .matches(new RegExp(/^[A-Za-z0-9_.]+$/))
       .required(),
     firstName: yup
       .string({ message: "Need to be string" })
@@ -86,6 +92,7 @@ const registration = () => {
     reset,
     watch,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -111,7 +118,7 @@ const registration = () => {
     }
 
     // console.log(data, { SERVER_PATH }, { error, message });
-    console.log({ data });
+    // console.log({ data });
 
     let _data = {
       login_id: data?.loginID,
@@ -165,7 +172,34 @@ const registration = () => {
       }, 2000);
     }
   };
-  console.log({ error, message });
+  const getPatientDetail = async (_id) => {
+    // console.log("AAHAHAH", { type });
+    let _type = "doctor/getDoctorByID";
+    let res = await getUser(_type, _id);
+    // console.log({ res });
+
+    if (res?.user_data?.length) {
+      // console.log("USER : ", res?.user_data[0]);
+      return res?.user_data[0];
+    } else {
+      return null;
+    }
+  };
+  const handleBlur = async () => {
+    let _id = document.getElementById("loginID").value;
+    // console.log({ _id });
+    let _data = await getPatientDetail(_id);
+    // console.log({ _data });
+    setValue("firstName", _data?.first_name);
+    setValue("middleName", _data?.middle_name);
+    setValue("lastName", _data?.last_name);
+    setValue("mobile", _data?.mobile);
+    setValue("email", _data?.email);
+    setValue("education", _data?.education);
+    setValue("specialty", _data?.specialty);
+  };
+
+  // console.log({ error, message });
   //   const handleSubmit = () => {
   //     console.log("data: ", data);
   //     let formm = document.getElementById("regform");
@@ -229,6 +263,7 @@ const registration = () => {
                                 {...register("loginID", { required: true })}
                                 // required={true}
                                 // onChange={handleChange}
+                                onBlur={handleBlur}
                               />
                             </div>
                           </div>
@@ -261,6 +296,7 @@ const registration = () => {
                                 className="form-control"
                                 type="text"
                                 id="firstName"
+                                name="firstName"
                                 placeholder="First Name"
                                 {...register("firstName", { required: true })}
                                 // required={true}
