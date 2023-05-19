@@ -188,7 +188,7 @@ const ChangePassword = () => {
                                         </label>
                                         <input
                                           className="form-control"
-                                          // type="text"
+                                          type="password"
                                           // multiple={true}
                                           id="note"
                                           placeholder="Old Password"
@@ -210,7 +210,7 @@ const ChangePassword = () => {
                                         </label>
                                         <input
                                           className="form-control"
-                                          // type="text"
+                                          type="password"
                                           // multiple={true}
                                           id="note"
                                           placeholder="New Password"
@@ -232,7 +232,7 @@ const ChangePassword = () => {
                                         </label>
                                         <input
                                           className="form-control"
-                                          // type="text"
+                                          type="password"
                                           // multiple={true}
                                           id="note"
                                           placeholder="Confirm Password"
