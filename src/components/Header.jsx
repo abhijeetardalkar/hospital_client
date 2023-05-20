@@ -4,7 +4,7 @@ import { SERVER_PATH } from "../../config";
 import { Link, useLocation } from "react-router-dom";
 
 const ROUTE_ARRAY = {
-  dashboard: ["/d/dashboard", "/a/dashboard"],
+  dashboard: ["/d/dashboard", "/a/dashboard", "/p/dashboard"],
   blog: ["/admin/create-blog", "/blogs/blog", "/blogs/blogsAll"],
   note: ["/admin/create-note", "/notes/note", "/notes/notesAll"],
   doctor: ["/doctor/registration"],
@@ -13,6 +13,7 @@ const ROUTE_ARRAY = {
     "/patient/change-password",
     "/doctor/change-password",
   ],
+  activation: ["/doctor/doctor-activation"],
 };
 
 const Header = ({ setLoginFullName }) => {
@@ -80,7 +81,10 @@ const Header = ({ setLoginFullName }) => {
       _path = "Create Appointment";
     } else if (location.pathname == "/patient/registration") {
       _path = "Patient Registration";
-    } else if (location.pathname == "/doctor/previous-appointment") {
+    } else if (
+      location.pathname == "/doctor/previous-appointment" ||
+      location.pathname == "/patient/previous-appointment"
+    ) {
       _path = "Previous Appointment";
     } else if (ROUTE_ARRAY.blog.includes(location.pathname)) {
       _path = "Blog";
@@ -92,6 +96,8 @@ const Header = ({ setLoginFullName }) => {
       _path = "Create Doctor";
     } else if (ROUTE_ARRAY.password.includes(location.pathname)) {
       _path = "Password Change";
+    } else if (ROUTE_ARRAY.activation.includes(location.pathname)) {
+      _path = "Doctor Activation";
     }
 
     setSlag(_path);

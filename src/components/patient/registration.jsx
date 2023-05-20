@@ -143,6 +143,7 @@ const registration = () => {
       diet_plan: null,
       smoke: null,*/
     };
+    console.log("inserting", _data);
     let res = await fetch(SERVER_PATH + "/api/patient/insertPatient", {
       method: "post",
       headers: {
@@ -179,7 +180,7 @@ const registration = () => {
     // console.log(data, { SERVER_PATH }, { error, message });
     let _data = {
       login_id: data?.loginID,
-      password: data?.password,
+      // password: data?.password,
       first_name: data?.firstName,
       middle_name: data?.middleName || null,
       last_name: data?.lastName,
