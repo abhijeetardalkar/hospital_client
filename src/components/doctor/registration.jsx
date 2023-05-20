@@ -32,15 +32,15 @@ const SPECIALTY = [
     label: "Ophthalmology",
   },
   {
-    id: 6,
+    id: 7,
     label: "Cardiology",
   },
   {
-    id: 6,
-    label: "Ophthalmology",
+    id: 8,
+    label: "Dermatology",
   },
   {
-    id: 7,
+    id: 9,
     label: "General",
   },
 ];
@@ -67,22 +67,50 @@ const schema = yup
       .required(),
     // .matches(new RegExp(/a-zA-z/))
     email: yup.string().email().required(),
-    password: yup
-      .string()
-      .matches(
-        new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
-      )
-      .required(),
-    confirmPassword: yup
-      .string()
-      .matches(
-        new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
-      )
-      .required(),
+    // password: yup
+    //   .string()
+    //   .matches(
+    //     new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+    //   )
+    //   .required(),
+    // confirmPassword: yup
+    // .string()
+    // .matches(
+    //   new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+    // )
+    // .required(),
+    password: yup.string().when("editmode", {
+      is: (editmode) => {
+        return editmode.length === 0;
+      },
+      then: (schema) =>
+        yup
+          .string()
+          .matches(
+            new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+          )
+          .required(),
+      otherwise: (schema) => schema.notRequired().optional().nullable(),
+    }),
+    confirmPassword: yup.string().when("password", {
+      is: (password) => {
+        return password.length !== 0;
+      },
+      then: (schema) =>
+        yup
+          .string()
+          .matches(
+            new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+          )
+          .required(),
+      otherwise: (schema) => schema.notRequired().optional().nullable(),
+    }),
+
     mobile: yup.string().matches(new RegExp(/^\d{10}$/)),
   })
   .required();
 const registration = () => {
+  const [editMode, setEditMode] = useState(null); //set to doc_id
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   //   const [data, setData] = useState({});
@@ -97,6 +125,15 @@ const registration = () => {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data) => {
+    console.log({ editMode, data });
+    if (editMode == null || editMode == "" || editMode == false) {
+      insertRecord(data);
+    } else {
+      updateRecord(data);
+    }
+  };
+
+  const insertRecord = async (data) => {
     let _error = {};
     if (data?.password != data?.confirmPassword) {
       _error = "Password Mismatch";
@@ -172,6 +209,60 @@ const registration = () => {
       }, 2000);
     }
   };
+
+  const updateRecord = async (data) => {
+    let _error = {};
+
+    // console.log(data, { SERVER_PATH }, { error, message });
+    // console.log({ data });
+
+    let _data = {
+      login_id: data?.loginID,
+      first_name: data?.firstName,
+      middle_name: data?.middleName || null,
+      last_name: data?.lastName,
+      mobile: data?.mobile || null,
+      email: data?.email || null,
+      education: data?.education,
+      specialty: data?.specialty,
+      doc_id: editMode,
+      // dob: null,
+      // address: null,
+      // gender: null,
+      // aadhar: null,
+      // pincode: null,
+      // height: null,
+      // weight: null,
+      // disease: null,
+      // exercise: null,
+      // diet_plan: null,
+      // smoke: null,
+    };
+    let res = await fetch(SERVER_PATH + "/api/doctor/updateDoctor", {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(_data),
+    });
+    let result = await res.json();
+    console.log({ result });
+
+    // if (result && result.hasOwnProperty() && !result.hasOwnProperty("error")) {
+    if (result && result?.doc_data && result?.doc_data?.length) {
+      setMessage("Doctor Updated Successfully");
+      reset();
+      setTimeout(() => {
+        setMessage(null);
+      }, 2000);
+    } else {
+      setError("Doctor Updation Failed");
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
+    }
+  };
   const getPatientDetail = async (_id) => {
     // console.log("AAHAHAH", { type });
     let _type = "doctor/getDoctorByID";
@@ -190,6 +281,13 @@ const registration = () => {
     // console.log({ _id });
     let _data = await getPatientDetail(_id);
     // console.log({ _data });
+    if (!_data) {
+      setEditMode(false);
+      setValue("editmode", "");
+      return;
+    }
+    setEditMode(_data?.doc_id);
+    setValue("editmode", _data?.doc_id);
     setValue("firstName", _data?.first_name);
     setValue("middleName", _data?.middle_name);
     setValue("lastName", _data?.last_name);
@@ -402,7 +500,9 @@ const registration = () => {
                                 type="password"
                                 id="password"
                                 placeholder="Password"
-                                {...register("password", { required: true })}
+                                {...register("password", {
+                                  required: !editMode ? true : false,
+                                })}
                                 // onChange={handleChange}
                               />
                             </div>
@@ -421,12 +521,30 @@ const registration = () => {
                                 id="confirmPassword"
                                 placeholder="Confirm Password"
                                 {...register("confirmPassword", {
-                                  required: true,
+                                  required: !editMode ? true : false,
                                 })}
                                 // onChange={handleChange}
                               />
                             </div>
                           </div>{" "}
+                          <div
+                            className="username col-xl-6 col-sm-6 mb-xl-0 mb-4"
+                            style={{ display: "none" }}
+                          >
+                            <div className="confirm-password">
+                              <label className="form__label" for="editmode">
+                                editmode{" "}
+                              </label>
+                              <input
+                                className="form-control"
+                                type="editmode"
+                                id="editmode"
+                                placeholder="editmode"
+                                {...register("editmode")}
+                                // onChange={handleChange}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div class="footer">

@@ -34,23 +34,51 @@ const schema = yup
       .required(),
     // .matches(new RegExp(/a-zA-z/))
     email: yup.string().email().required(),
-    password: yup
-      .string()
-      .matches(
-        new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
-      )
-      .required(),
-    confirmPassword: yup
-      .string()
-      .matches(
-        new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
-      )
-      .required(),
+    // password: yup
+    //   .string()
+    //   .matches(
+    //     new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+    //   )
+    //   .required(),
+    // confirmPassword: yup
+    //   .string()
+    //   .matches(
+    //     new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+    //   )
+    password: yup.string().when("editmode", {
+      is: (editmode) => {
+        return editmode.length === 0;
+      },
+      then: (schema) =>
+        yup
+          .string()
+          .matches(
+            new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+          )
+          .required(),
+      otherwise: (schema) => schema.notRequired().optional().nullable(),
+    }),
+    confirmPassword: yup.string().when("password", {
+      is: (password) => {
+        return password.length !== 0;
+      },
+      then: (schema) =>
+        yup
+          .string()
+          .matches(
+            new RegExp(/^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&?@ "]).*$/)
+          )
+          .required(),
+      otherwise: (schema) => schema.notRequired().optional().nullable(),
+    }),
+
+    // .required(),
     mobile: yup.string().matches(new RegExp(/^\d{10}$/)),
   })
   .required();
 
 const registration = () => {
+  const [editMode, setEditMode] = useState(null); //set to pat_id
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   //   const [data, setData] = useState({});
@@ -66,6 +94,14 @@ const registration = () => {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data) => {
+    console.log({ editMode, data });
+    if (editMode == null || editMode == "" || editMode == false) {
+      insertRecord(data);
+    } else {
+      updateRecord(data);
+    }
+  };
+  const insertRecord = async (data) => {
     let _error = {};
     if (data?.password != data?.confirmPassword) {
       _error = "Password Mismatch";
@@ -95,7 +131,7 @@ const registration = () => {
       last_name: data?.lastName,
       mobile: data?.mobile || null,
       email: data?.email || null,
-      dob: null,
+      /*dob: null,
       aadhar: null,
       pincode: null,
       address: null,
@@ -105,7 +141,7 @@ const registration = () => {
       disease: null,
       exercise: null,
       diet_plan: null,
-      smoke: null,
+      smoke: null,*/
     };
     let res = await fetch(SERVER_PATH + "/api/patient/insertPatient", {
       method: "post",
@@ -137,6 +173,56 @@ const registration = () => {
       }, 2000);
     }
   };
+  const updateRecord = async (data) => {
+    let _error = {};
+
+    // console.log(data, { SERVER_PATH }, { error, message });
+    let _data = {
+      login_id: data?.loginID,
+      password: data?.password,
+      first_name: data?.firstName,
+      middle_name: data?.middleName || null,
+      last_name: data?.lastName,
+      mobile: data?.mobile || null,
+      email: data?.email || null,
+      pat_id: editMode,
+      /*dob: null,
+      aadhar: null,
+      pincode: null,
+      address: null,
+      gender: null,
+      height: null,
+      weight: null,
+      disease: null,
+      exercise: null,
+      diet_plan: null,
+      smoke: null,*/
+    };
+    let res = await fetch(SERVER_PATH + "/api/patient/updatePatient", {
+      method: "post",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(_data),
+    });
+    let result = await res.json();
+    // console.log({ result });
+
+    // if (result && result.hasOwnProperty() && !result.hasOwnProperty("error")) {
+    if (result && result?.user_data && result?.user_data?.length) {
+      setMessage("Patient Updated Successfully");
+      reset();
+      setTimeout(() => {
+        setMessage(null);
+      }, 2000);
+    } else {
+      setError("Patient Updation Failed");
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
+    }
+  };
   const getPatientDetail = async (_id) => {
     // console.log("AAHAHAH", { type });
     let _type = "patient/getPatientByID";
@@ -156,6 +242,13 @@ const registration = () => {
     // console.log({ _id });
     let _data = await getPatientDetail(_id);
     // console.log({ _data });
+    if (!_data) {
+      setEditMode(false);
+      setValue("editmode", "");
+      return;
+    }
+    setEditMode(_data?.pat_id);
+    setValue("editmode", _data?.pat_id);
     setValue("firstName", _data?.first_name);
     setValue("middleName", _data?.middle_name);
     setValue("lastName", _data?.last_name);
@@ -334,6 +427,24 @@ const registration = () => {
                               {...register("confirmPassword", {
                                 required: true,
                               })}
+                              // onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className="username col-xl-6 col-sm-6 mb-xl-0 mb-4"
+                          // style={{ display: "none" }}
+                        >
+                          <div className="confirm-password">
+                            <label className="form__label" for="editmode">
+                              editmode{" "}
+                            </label>
+                            <input
+                              className="form-control"
+                              type="editmode"
+                              id="editmode"
+                              placeholder="editmode"
+                              {...register("editmode")}
                               // onChange={handleChange}
                             />
                           </div>
